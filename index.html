@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>S.E.N.T.I.N.E.L.</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Special+Elite&family=Cutive+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-d: 'Orbitron', monospace;
+  --font-m: 'Cutive Mono', monospace;
+  --font-b: 'Special Elite', cursive;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:#050a05;--bg2:#0a120a;--bg3:#0f1a0f;--bg4:#142014;
+    --border:#1a2e1a;--border2:#234023;
+    --text:#4dff4d;--text2:#39c939;--muted:#2a6b2a;--muted2:#1a4a1a;
+    --accent:#4dff4d;--accent2:#39c939;
+    --dim:rgba(77,255,77,.08);--dim2:rgba(77,255,77,.15);
+    --red:#ff4444;--amber:#ffb020;--teal:#20ffcc;--blue:#4d9fff;--purple:#a855f7;
+    --glow:0 0 12px rgba(77,255,77,.3);--glow2:0 0 24px rgba(77,255,77,.5);
+    --ton:#050a05;--scan:rgba(77,255,77,.025);
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:#f0f2f5;--bg2:#fff;--bg3:#e8ecf2;--bg4:#dde2ea;
+    --border:#dde2ea;--border2:#c8d0dc;
+    --text:#1a2035;--text2:#3a4a6a;--muted:#6b7a99;--muted2:#9aa3b8;
+    --accent:#1e6eff;--accent2:#1558d6;
+    --dim:rgba(30,110,255,.06);--dim2:rgba(30,110,255,.12);
+    --red:#e03535;--amber:#d4840a;--teal:#0a9e85;--blue:#1e6eff;--purple:#7c3aed;
+    --glow:0 2px 12px rgba(30,110,255,.15);--glow2:0 4px 24px rgba(30,110,255,.25);
+    --ton:#fff;--scan:transparent;
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);min-height:100vh;overflow-x:hidden;}
+@media(prefers-color-scheme:dark){body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background:repeating-linear-gradient(0deg,var(--scan) 0,var(--scan) 1px,transparent 1px,transparent 3px);}}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:1px;}
+
+/* ── AUTH ── */
+#auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+.auth-box{width:100%;max-width:380px;background:var(--bg2);border:1px solid var(--border2);border-radius:4px;padding:36px 28px;position:relative;}
+@media(prefers-color-scheme:dark){.auth-box{box-shadow:var(--glow);}.auth-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);box-shadow:var(--glow);}}
+.auth-logo{font-family:var(--font-d);font-size:12px;font-weight:700;letter-spacing:.3em;color:var(--accent);text-align:center;margin-bottom:3px;}
+@media(prefers-color-scheme:dark){.auth-logo{text-shadow:var(--glow);}}
+.auth-tag{font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:center;letter-spacing:.12em;margin-bottom:24px;}
+.auth-tabs{display:flex;border:1px solid var(--border2);border-radius:3px;overflow:hidden;margin-bottom:20px;}
+.auth-tab{flex:1;padding:9px;background:transparent;border:none;font-family:var(--font-m);font-size:10px;letter-spacing:.08em;color:var(--muted);cursor:pointer;transition:all .15s;}
+.auth-tab.active{background:var(--accent);color:var(--ton);}
+.auth-form{display:flex;flex-direction:column;gap:10px;}
+.auth-input{background:var(--bg3);border:1px solid var(--border2);border-radius:2px;padding:11px 12px;color:var(--text);font-family:var(--font-m);font-size:12px;outline:none;transition:border-color .2s;width:100%;}
+.auth-input:focus{border-color:var(--accent);}
+.auth-input::placeholder{color:var(--muted2);}
+.nick-hint{font-family:var(--font-m);font-size:10px;color:var(--muted);margin-top:-4px;padding-left:2px;}
+.auth-btn{padding:12px;background:var(--accent);border:none;border-radius:2px;color:var(--ton);font-family:var(--font-d);font-size:10px;font-weight:700;letter-spacing:.1em;cursor:pointer;transition:all .2s;width:100%;}
+.auth-btn:hover{background:var(--accent2);box-shadow:var(--glow);}
+.auth-btn.gmail{background:var(--bg3);color:var(--text2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;gap:10px;}
+.auth-btn.gmail:hover{border-color:var(--accent);background:var(--dim);}
+.auth-btn.tg{background:var(--bg3);color:var(--text2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;gap:10px;}
+.auth-btn.tg:hover{border-color:var(--accent);}
+.auth-err{font-family:var(--font-m);font-size:11px;color:var(--red);min-height:14px;}
+.auth-demo{display:block;width:100%;margin-top:10px;padding:10px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:2px;font-family:var(--font-m);font-size:11px;cursor:pointer;transition:all .2s;}
+.auth-demo:hover{border-color:var(--border2);color:var(--text2);}
+/* nick setup step */
+.nick-step{display:none;flex-direction:column;gap:12px;}
+.nick-step.active{display:flex;}
+.nick-avatar{width:56px;height:56px;border-radius:3px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:18px;font-weight:900;color:var(--ton);margin:0 auto 4px;}
+
+/* ── APP SHELL ── */
+#app{display:none;}
+.layout{display:flex;min-height:100vh;}
+
+/* ── SIDEBAR (desktop) ── */
+.sidebar{width:210px;min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);padding:18px 12px;display:flex;flex-direction:column;gap:2px;position:fixed;left:0;top:0;bottom:0;z-index:100;transition:transform .25s;}
+@media(prefers-color-scheme:dark){.sidebar{box-shadow:2px 0 20px rgba(77,255,77,.05);}}
+.logo-block{padding:4px 8px 14px;border-bottom:1px solid var(--border);margin-bottom:10px;}
+.logo-txt{font-family:var(--font-d);font-size:11px;font-weight:700;letter-spacing:.25em;color:var(--accent);line-height:1.6;}
+@media(prefers-color-scheme:dark){.logo-txt{text-shadow:var(--glow);}}
+.logo-sub{font-family:var(--font-m);font-size:9px;color:var(--muted);letter-spacing:.1em;margin-top:1px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:2px;color:var(--muted);font-family:var(--font-m);font-size:11px;letter-spacing:.05em;cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;}
+.nav-item:hover{background:var(--dim);color:var(--text2);}
+.nav-item.active{background:var(--dim2);color:var(--accent);}
+@media(prefers-color-scheme:dark){.nav-item.active{box-shadow:inset 2px 0 0 var(--accent);}}
+.nav-icon{font-size:13px;width:16px;flex-shrink:0;}
+.nbadge{margin-left:auto;background:var(--accent);color:var(--ton);font-size:9px;font-family:var(--font-m);padding:1px 5px;border-radius:2px;}
+.nbadge.red{background:var(--red);color:#fff;}
+.sidebar-bottom{margin-top:auto;padding-top:12px;border-top:1px solid var(--border);}
+.sb-actions{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-bottom:8px;}
+.icon-btn{background:none;border:none;cursor:pointer;padding:6px;color:var(--muted);font-size:15px;border-radius:2px;transition:all .15s;position:relative;}
+.icon-btn:hover{color:var(--accent);background:var(--dim);}
+.ndot{position:absolute;top:3px;right:3px;width:6px;height:6px;background:var(--red);border-radius:50%;display:none;}
+.ndot.show{display:block;}
+.user-pill{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg3);border-radius:2px;cursor:pointer;}
+.user-pill:hover{background:var(--bg4);}
+.uav{width:26px;height:26px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:9px;font-weight:700;color:var(--ton);flex-shrink:0;}
+.uname{font-family:var(--font-m);font-size:11px;}
+.urole{font-size:9px;color:var(--muted);font-family:var(--font-m);}
+.xp-mini{margin-top:8px;padding:0 2px;}
+.xp-mini-row{font-family:var(--font-m);font-size:9px;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:3px;}
+.xp-track{height:3px;background:var(--border);border-radius:1px;overflow:hidden;}
+.xp-fill{height:100%;background:var(--accent);border-radius:1px;transition:width 1s ease;}
+@media(prefers-color-scheme:dark){.xp-fill{box-shadow:0 0 6px var(--accent);}}
+
+/* ── MOBILE NAV ── */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);z-index:200;padding:6px 4px env(safe-area-inset-bottom);flex-direction:row;}
+.mnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;background:none;border:none;cursor:pointer;color:var(--muted);font-family:var(--font-m);font-size:8px;letter-spacing:.04em;transition:color .15s;position:relative;}
+.mnav-item.active{color:var(--accent);}
+.mnav-icon{font-size:18px;line-height:1;}
+.mnav-badge{position:absolute;top:2px;right:calc(50% - 14px);background:var(--red);color:#fff;font-size:8px;font-family:var(--font-m);padding:0 4px;border-radius:8px;min-width:14px;text-align:center;}
+.mobile-header{display:none;position:fixed;top:0;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--border);z-index:99;padding:10px 16px;align-items:center;justify-content:space-between;}
+.mh-title{font-family:var(--font-d);font-size:10px;letter-spacing:.15em;color:var(--accent);}
+@media(prefers-color-scheme:dark){.mh-title{text-shadow:var(--glow);}}
+.mh-actions{display:flex;gap:6px;}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.mob-open{transform:translateX(0);}
+  .mobile-nav{display:flex;}
+  .mobile-header{display:flex;}
+  .main{margin-left:0!important;padding:70px 14px 80px!important;}
+  .stats-row{grid-template-columns:1fr 1fr!important;}
+  .cockpit-grid{grid-template-columns:1fr!important;}
+  .detail-grid{grid-template-columns:1fr 1fr!important;}
+  .adv-grid{grid-template-columns:1fr!important;}
+  .cal-grid{grid-template-columns:repeat(7,1fr)!important;}
+  .req-grid{grid-template-columns:1fr 1fr!important;}
+  .form-row{grid-template-columns:1fr!important;}
+  table td,table th{padding:7px 8px!important;font-size:11px!important;}
+}
+
+/* ── MAIN ── */
+.main{margin-left:210px;padding:24px 28px;min-height:100vh;}
+.page{display:none;}
+.page.active{display:block;}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+.page-title{font-family:var(--font-d);font-size:15px;font-weight:700;letter-spacing:.15em;color:var(--accent);}
+@media(prefers-color-scheme:dark){.page-title{text-shadow:var(--glow);}}
+
+/* ── STATS ROW ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:14px 16px;position:relative;overflow:hidden;}
+@media(prefers-color-scheme:dark){.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--accent);opacity:.4;}}
+.stat-label{font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.stat-value{font-family:var(--font-d);font-size:22px;font-weight:700;letter-spacing:-.5px;}
+.sv-green{color:var(--accent);}@media(prefers-color-scheme:dark){.sv-green{text-shadow:var(--glow);}}
+.sv-blue{color:var(--blue);}
+.sv-amber{color:var(--amber);}
+.sv-red{color:var(--red);}
+.stat-sub{font-family:var(--font-m);font-size:9px;color:var(--muted);margin-top:3px;}
+
+/* ── COCKPIT ── */
+.cockpit-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.cc{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:18px;}
+.cc h3{font-family:var(--font-m);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.chart-bars{display:flex;align-items:flex-end;gap:5px;height:90px;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.bar-body{width:100%;border-radius:2px 2px 0 0;transition:height .7s cubic-bezier(.34,1.56,.64,1);min-height:3px;}
+.bprofit{background:var(--accent);}@media(prefers-color-scheme:dark){.bprofit{box-shadow:0 0 6px var(--accent);}}
+.brevenue{background:var(--blue);opacity:.55;}
+.bar-lbl{font-family:var(--font-m);font-size:7px;color:var(--muted);}
+.bar-val{font-family:var(--font-m);font-size:7px;color:var(--text2);}
+.cockpit-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;}
+.mbox{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:10px;text-align:center;}
+.mval{font-family:var(--font-d);font-size:16px;font-weight:700;color:var(--accent);}
+.mlbl{font-family:var(--font-m);font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.06em;}
+.tdrow{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.tdrank{font-family:var(--font-m);font-size:9px;color:var(--muted);width:14px;}
+.tdname{font-family:var(--font-m);font-size:11px;flex:1;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tdbar{flex:2;height:4px;background:var(--bg3);border-radius:1px;overflow:hidden;}
+.tdbarfill{height:100%;background:var(--accent);border-radius:1px;}
+@media(prefers-color-scheme:dark){.tdbarfill{box-shadow:0 0 4px var(--accent);}}
+.tdval{font-family:var(--font-m);font-size:10px;color:var(--accent);min-width:55px;text-align:right;}
+.period-sel{background:var(--bg2);border:1px solid var(--border2);border-radius:2px;padding:5px 10px;color:var(--accent);font-family:var(--font-m);font-size:10px;letter-spacing:.06em;outline:none;cursor:pointer;}
+.period-sel option{background:var(--bg2);color:var(--text);}
+.user-filter-sel{background:var(--bg2);border:1px solid var(--border2);border-radius:2px;padding:5px 10px;color:var(--text2);font-family:var(--font-m);font-size:10px;outline:none;cursor:pointer;margin-left:8px;}
+.user-filter-sel option{background:var(--bg2);}
+
+/* ── TABLE ── */
+.toolbar{display:flex;align-items:center;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+.search-box{flex:1;min-width:160px;background:var(--bg2);border:1px solid var(--border2);border-radius:2px;padding:8px 11px;color:var(--text);font-family:var(--font-m);font-size:12px;outline:none;transition:border-color .2s;}
+.search-box:focus{border-color:var(--accent);}
+.search-box::placeholder{color:var(--muted2);}
+.fbtn{padding:7px 10px;background:var(--bg2);border:1px solid var(--border2);border-radius:2px;color:var(--muted);font-family:var(--font-m);font-size:9px;letter-spacing:.06em;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fbtn:hover,.fbtn.active{border-color:var(--accent);color:var(--accent);background:var(--dim);}
+.add-btn{padding:8px 14px;background:var(--accent);border:none;border-radius:2px;color:var(--ton);font-family:var(--font-d);font-size:9px;font-weight:700;letter-spacing:.1em;cursor:pointer;transition:all .15s;}
+.add-btn:hover{background:var(--accent2);box-shadow:var(--glow);}
+.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:3px;overflow:hidden;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:500px;}
+thead th{padding:8px 12px;font-family:var(--font-m);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);text-align:left;border-bottom:1px solid var(--border);background:var(--bg3);cursor:pointer;user-select:none;white-space:nowrap;}
+thead th:hover{color:var(--text2);}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:var(--dim);}
+td{padding:9px 12px;font-size:12px;vertical-align:middle;}
+.dom-cell{font-family:var(--font-m);font-size:11px;font-weight:500;}
+.score-bar{display:flex;align-items:center;gap:6px;}
+.snum{font-family:var(--font-m);font-size:11px;font-weight:600;min-width:30px;}
+.btrack{flex:1;height:4px;background:var(--bg3);border-radius:1px;overflow:hidden;min-width:40px;}
+.bfill{height:100%;border-radius:1px;}
+.geo-tags{display:flex;flex-wrap:wrap;gap:3px;}
+.gtag{font-family:var(--font-m);font-size:9px;padding:2px 5px;background:var(--bg3);border:1px solid var(--border);border-radius:1px;color:var(--muted);}
+.cbadge{font-family:var(--font-m);font-size:9px;padding:2px 6px;background:var(--dim);border:1px solid var(--border);border-radius:1px;color:var(--muted);}
+.ban-badge{display:inline-flex;align-items:center;font-family:var(--font-m);font-size:9px;padding:2px 6px;border-radius:1px;}
+.bb-ban{background:rgba(255,68,68,.12);color:var(--red);border:1px solid rgba(255,68,68,.3);}
+.bb-ok{background:var(--dim);color:var(--accent);border:1px solid var(--border);}
+.rank-b{font-family:var(--font-m);font-size:9px;padding:2px 6px;border-radius:1px;font-weight:500;letter-spacing:.04em;}
+.rl{background:rgba(255,176,32,.15);color:var(--amber);border:1px solid rgba(255,176,32,.3);}
+.re{background:rgba(77,159,255,.12);color:var(--blue);border:1px solid rgba(77,159,255,.25);}
+.rr{background:rgba(32,255,204,.1);color:var(--teal);border:1px solid rgba(32,255,204,.2);}
+.ru{background:var(--dim2);color:var(--accent);border:1px solid var(--border2);}
+.rc{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
+.rt{background:rgba(255,68,68,.08);color:var(--red);border:1px solid rgba(255,68,68,.2);}
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border);}
+.pinfo{font-family:var(--font-m);font-size:10px;color:var(--muted);}
+.pbtns{display:flex;gap:4px;}
+.pbtn{padding:4px 9px;background:var(--bg3);border:1px solid var(--border);border-radius:2px;color:var(--muted);font-family:var(--font-m);font-size:10px;cursor:pointer;transition:all .15s;}
+.pbtn:hover,.pbtn.active{border-color:var(--accent);color:var(--accent);}
+.pbtn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* ── OWNER BADGE ── */
+.owner-b{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-m);font-size:9px;padding:2px 7px;background:var(--dim);border:1px solid var(--border2);border-radius:1px;}
+.oav{width:13px;height:13px;border-radius:1px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;font-family:var(--font-d);}
+.owner-sel{background:var(--bg2);border:1px solid var(--border2);border-radius:2px;padding:5px 8px;color:var(--text);font-family:var(--font-m);font-size:11px;outline:none;cursor:pointer;margin-top:6px;width:100%;}
+.owner-sel:focus{border-color:var(--accent);}
+
+/* ── NOTES WALL ── */
+.wall{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:10px;max-height:200px;overflow-y:auto;}
+.wall-empty{font-family:var(--font-m);font-size:11px;color:var(--muted2);text-align:center;padding:20px;}
+.wentry{border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:8px;}
+.wentry:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.wmeta{display:flex;align-items:center;gap:7px;margin-bottom:3px;}
+.wav{width:15px;height:15px;border-radius:1px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;font-family:var(--font-d);}
+.wauthor{font-family:var(--font-m);font-size:9px;font-weight:700;}
+.wts{font-family:var(--font-m);font-size:9px;color:var(--muted);}
+.wtxt{font-family:var(--font-b);font-size:12px;color:var(--text2);line-height:1.5;}
+.wall-input-row{display:flex;gap:7px;margin-top:8px;}
+.wall-inp{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:7px 10px;color:var(--text);font-family:var(--font-b);font-size:12px;outline:none;resize:none;min-height:36px;}
+.wall-inp:focus{border-color:var(--accent);}
+.wall-post{padding:7px 12px;background:var(--accent);border:none;border-radius:2px;color:var(--ton);font-family:var(--font-d);font-size:9px;font-weight:700;letter-spacing:.08em;cursor:pointer;align-self:flex-end;}
+.wall-post:hover{background:var(--accent2);}
+
+/* ── MODAL ── */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px);padding:12px;}
+.modal-ov.open{display:flex;}
+.modal{width:100%;max-width:620px;max-height:90vh;overflow-y:auto;background:var(--bg2);border:1px solid var(--border2);border-radius:3px;padding:24px;position:relative;}
+@media(prefers-color-scheme:dark){.modal{box-shadow:var(--glow2);}}
+.modal-close{position:absolute;top:12px;right:12px;background:var(--bg3);border:1px solid var(--border);width:26px;height:26px;border-radius:2px;color:var(--muted);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font-m);}
+.modal-close:hover{color:var(--text);border-color:var(--accent);}
+.modal-title{font-family:var(--font-d);font-size:13px;font-weight:700;letter-spacing:.15em;color:var(--accent);margin-bottom:18px;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;}
+.dblock{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:10px;}
+.dkey{font-family:var(--font-m);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;}
+.dval{font-family:var(--font-m);font-size:12px;font-weight:500;color:var(--text);word-break:break-all;}
+.trblock{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:12px;margin-bottom:10px;}
+.trblock h4{font-family:var(--font-m);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;}
+.trrow{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.trrow:last-child{margin-bottom:0;}
+.trlbl{font-family:var(--font-m);font-size:10px;color:var(--muted);width:54px;}
+.trtrack{flex:1;height:7px;background:var(--bg2);border-radius:1px;overflow:hidden;}
+.trfill{height:100%;border-radius:1px;}
+.trval{font-family:var(--font-m);font-size:10px;width:34px;text-align:right;}
+.notes-inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:9px 11px;color:var(--text);font-family:var(--font-b);font-size:12px;resize:vertical;min-height:60px;outline:none;margin-top:10px;}
+.notes-inp:focus{border-color:var(--accent);}
+.modal-actions{display:flex;gap:7px;margin-top:14px;flex-wrap:wrap;}
+.mbtn{flex:1;min-width:80px;padding:9px;border-radius:2px;font-family:var(--font-d);font-size:9px;font-weight:700;letter-spacing:.1em;cursor:pointer;border:none;transition:all .15s;}
+.mbtn.p{background:var(--accent);color:var(--ton);}
+.mbtn.p:hover{background:var(--accent2);box-shadow:var(--glow);}
+.mbtn.d{background:transparent;color:var(--red);border:1px solid rgba(255,68,68,.4);}
+.mbtn.d:hover{background:rgba(255,68,68,.1);}
+.mbtn.s{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
+.mbtn.s:hover{color:var(--text);border-color:var(--border2);}
+.ban-alert{display:flex;align-items:center;gap:7px;padding:9px 13px;background:rgba(255,68,68,.08);border:1px solid rgba(255,68,68,.3);border-radius:2px;margin-bottom:12px;font-family:var(--font-m);font-size:11px;color:var(--red);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.form-field{display:flex;flex-direction:column;gap:4px;}
+.form-field label{font-family:var(--font-m);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+.form-field input,.form-field select,.form-field textarea{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:8px 10px;color:var(--text);font-family:var(--font-m);font-size:12px;outline:none;transition:border-color .2s;}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--accent);}
+.form-field select option{background:var(--bg2);}
+.form-field textarea{resize:vertical;min-height:60px;font-family:var(--font-b);}
+
+/* ── DEALS ── */
+.deals-list{display:flex;flex-direction:column;gap:8px;}
+.deal-card{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;flex-wrap:wrap;}
+.deal-card:hover{border-color:var(--border2);background:var(--dim);}
+.deal-card.mega{border-color:var(--amber);}
+@media(prefers-color-scheme:dark){.deal-card.mega{box-shadow:0 0 14px rgba(255,176,32,.2);}}
+.deal-mon{font-family:var(--font-m);font-size:10px;color:var(--muted);min-width:56px;}
+.deal-dom{font-family:var(--font-m);font-size:12px;color:var(--text2);flex:1;min-width:100px;}
+.deal-buy{font-family:var(--font-m);font-size:11px;color:var(--muted);min-width:70px;}
+.deal-profit{font-family:var(--font-d);font-size:15px;font-weight:700;color:var(--accent);min-width:80px;text-align:right;}
+@media(prefers-color-scheme:dark){.deal-profit{text-shadow:var(--glow);}}
+.deal-profit.mega{color:var(--amber);}
+@media(prefers-color-scheme:dark){.deal-profit.mega{text-shadow:0 0 10px var(--amber);}}
+.deal-star{font-size:14px;opacity:0;transition:opacity .3s;}
+.deal-card.mega .deal-star{opacity:1;animation:starP 1.5s ease-in-out infinite;}
+@keyframes starP{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+/* ── XP ── */
+.xp-panel{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:18px;margin-bottom:16px;}
+.xp-panel h3{font-family:var(--font-m);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.xpbig{display:flex;align-items:baseline;gap:8px;margin-bottom:10px;}
+.xpnum{font-family:var(--font-d);font-size:32px;font-weight:700;color:var(--accent);}
+@media(prefers-color-scheme:dark){.xpnum{text-shadow:var(--glow2);}}
+.xplbl{font-family:var(--font-m);font-size:11px;color:var(--muted);}
+.xptrack{height:9px;background:var(--bg3);border-radius:1px;overflow:hidden;margin-bottom:5px;}
+.xpfill{height:100%;background:var(--accent);border-radius:1px;transition:width 1.2s cubic-bezier(.34,1.56,.64,1);}
+@media(prefers-color-scheme:dark){.xpfill{box-shadow:0 0 8px var(--accent);}}
+.xpsub{font-family:var(--font-m);font-size:9px;color:var(--muted);display:flex;justify-content:space-between;}
+
+/* ── ADV CARDS ── */
+.adv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+.adv-card{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:16px 18px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;}
+.adv-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);}
+.adv-card:hover{border-color:var(--border2);background:var(--dim);}
+.adv-card.cams::before{background:var(--blue);}
+.adv-card.dating::before{background:var(--amber);}
+.adv-card.paysite::before{background:var(--teal);}
+.adv-card.aff::before{background:var(--purple);}
+.adv-card.gambling::before{background:var(--red);}
+.adv-name{font-family:var(--font-d);font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--accent);margin-bottom:3px;}
+.adv-vert{font-family:var(--font-m);font-size:10px;color:var(--muted);margin-bottom:10px;}
+.adv-cr{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.adv-cl{font-family:var(--font-m);font-size:9px;color:var(--muted2);text-transform:uppercase;letter-spacing:.07em;width:46px;}
+.adv-cv{font-family:var(--font-m);font-size:10px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.adv-sr{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
+.adv-st{font-family:var(--font-m);font-size:9px;letter-spacing:.05em;}
+.adv-st.active{color:var(--accent);}
+.adv-st.paused{color:var(--amber);}
+.adv-st.prospect{color:var(--muted);}
+.adv-dc{font-family:var(--font-m);font-size:9px;color:var(--muted);}
+/* adv modal */
+.am-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;}
+.am-icon{width:44px;height:44px;border-radius:2px;background:var(--dim2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:14px;font-weight:900;color:var(--accent);flex-shrink:0;}
+.am-name{font-family:var(--font-d);font-size:14px;font-weight:700;letter-spacing:.12em;color:var(--accent);}
+.am-vert{font-family:var(--font-m);font-size:11px;color:var(--muted);margin-top:2px;}
+.req-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.req-box{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:9px;}
+.req-lbl{font-family:var(--font-m);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;}
+.req-val{font-family:var(--font-m);font-size:11px;color:var(--text);}
+.ssel{display:flex;gap:5px;margin-top:12px;}
+.sopt{flex:1;padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:2px;font-family:var(--font-m);font-size:9px;letter-spacing:.06em;text-align:center;cursor:pointer;transition:all .15s;}
+.sopt:hover{border-color:var(--border2);}
+.sopt.sa{background:var(--dim2);border-color:var(--accent);color:var(--accent);}
+.sopt.sp{background:rgba(255,176,32,.1);border-color:var(--amber);color:var(--amber);}
+.sopt.sq{background:var(--bg4);border-color:var(--border2);color:var(--muted);}
+
+/* ── SCORE OVERLAY ── */
+.score-ov{position:fixed;inset:0;z-index:9998;pointer-events:none;display:flex;align-items:center;justify-content:center;}
+.score-txt{font-family:var(--font-d);font-size:clamp(40px,10vw,72px);font-weight:900;letter-spacing:.2em;color:var(--amber);text-shadow:0 0 40px var(--amber),0 0 80px rgba(255,176,32,.5);opacity:0;transform:scale(.5);pointer-events:none;}
+.score-txt.blast{animation:sBlast .15s ease-out forwards,sFade .8s ease-in .3s forwards;}
+@keyframes sBlast{0%{opacity:0;transform:scale(.3) translateY(30px)}60%{opacity:1;transform:scale(1.15) translateY(-10px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes sFade{0%{opacity:1}100%{opacity:0;transform:scale(1.2) translateY(-40px)}}
+
+/* ── NOTIFICATIONS ── */
+.notif-panel{position:fixed;top:0;right:-330px;width:310px;height:100vh;background:var(--bg2);border-left:1px solid var(--border2);z-index:300;transition:right .25s ease;display:flex;flex-direction:column;padding:18px 14px;}
+.notif-panel.open{right:0;}
+@media(max-width:768px){.notif-panel{width:100%;right:-100%;}.notif-panel.open{right:0;}}
+.np-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.np-title{font-family:var(--font-d);font-size:10px;letter-spacing:.15em;color:var(--accent);}
+.np-close{background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;font-family:var(--font-m);}
+.np-close:hover{color:var(--text);}
+.np-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:7px;}
+.ni{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:9px 11px;border-left:3px solid var(--border);cursor:pointer;}
+.ni.sys{border-left-color:var(--blue);}
+.ni.sales{border-left-color:var(--accent);}
+.ni.personal{border-left-color:var(--amber);}
+.ni.unread{background:var(--dim);}
+.ni-type{font-family:var(--font-m);font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:2px;}
+.ni-title{font-family:var(--font-m);font-size:10px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.ni-msg{font-family:var(--font-b);font-size:12px;color:var(--text2);line-height:1.4;}
+.ni-ts{font-family:var(--font-m);font-size:9px;color:var(--muted);margin-top:3px;}
+.np-clear{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:7px;font-family:var(--font-m);font-size:10px;color:var(--muted);cursor:pointer;margin-top:8px;width:100%;transition:all .15s;}
+.np-clear:hover{border-color:var(--border2);color:var(--text);}
+
+/* ── CALENDAR ── */
+.cal-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:18px;margin-bottom:16px;}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.cal-title{font-family:var(--font-d);font-size:12px;letter-spacing:.12em;color:var(--accent);}
+.cal-nav{display:flex;gap:6px;}
+.cal-nav-btn{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:5px 10px;color:var(--muted);font-family:var(--font-m);font-size:11px;cursor:pointer;transition:all .15s;}
+.cal-nav-btn:hover{border-color:var(--accent);color:var(--accent);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-dow{font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:center;padding:4px 0;text-transform:uppercase;letter-spacing:.06em;}
+.cal-day{min-height:52px;background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:4px;cursor:pointer;transition:all .15s;position:relative;}
+.cal-day:hover{border-color:var(--accent);background:var(--dim);}
+.cal-day.today{border-color:var(--accent);background:var(--dim2);}
+.cal-day.other-month{opacity:.35;}
+.cal-day-num{font-family:var(--font-m);font-size:10px;color:var(--text2);margin-bottom:2px;}
+.cal-day.today .cal-day-num{color:var(--accent);font-weight:700;}
+.cal-dot{width:5px;height:5px;border-radius:50%;display:inline-block;margin:1px;}
+.tasks-list{display:flex;flex-direction:column;gap:7px;margin-top:14px;}
+.task-item{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:10px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.task-item:hover{border-color:var(--border2);}
+.task-check{width:16px;height:16px;border:1px solid var(--border2);border-radius:2px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;}
+.task-check.done{background:var(--accent);border-color:var(--accent);color:var(--ton);}
+.task-txt{flex:1;font-family:var(--font-b);font-size:12px;color:var(--text2);}
+.task-txt.done{text-decoration:line-through;color:var(--muted);}
+.task-meta{font-family:var(--font-m);font-size:9px;color:var(--muted);}
+.task-assign{font-family:var(--font-m);font-size:9px;padding:1px 5px;border-radius:1px;font-weight:600;}
+.magic-fab{position:fixed;bottom:100px;right:20px;width:50px;height:50px;background:var(--accent);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:var(--glow2);z-index:150;transition:all .2s;}
+.magic-fab:hover{transform:scale(1.1);}
+@media(min-width:769px){.magic-fab{bottom:30px;}}
+
+/* ── SETTINGS ── */
+.settings-section{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:18px;margin-bottom:14px;}
+.settings-section h3{font-family:var(--font-d);font-size:10px;letter-spacing:.15em;color:var(--accent);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);}
+.setting-row:last-child{border-bottom:none;}
+.setting-lbl{font-family:var(--font-b);font-size:13px;color:var(--text2);}
+.setting-sub{font-family:var(--font-m);font-size:10px;color:var(--muted);margin-top:1px;}
+.toggle{width:36px;height:20px;background:var(--border2);border-radius:10px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;}
+.toggle.on{background:var(--accent);}
+.toggle-knob{position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s;}
+.toggle.on .toggle-knob{transform:translateX(16px);}
+.integration-card{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:12px;display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.int-icon{width:32px;height:32px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.int-name{font-family:var(--font-d);font-size:10px;letter-spacing:.08em;color:var(--text2);}
+.int-status{font-family:var(--font-m);font-size:9px;color:var(--muted);margin-top:2px;}
+.int-btn{margin-left:auto;padding:5px 12px;background:var(--bg2);border:1px solid var(--border2);border-radius:2px;font-family:var(--font-m);font-size:9px;color:var(--muted);cursor:pointer;transition:all .15s;}
+.int-btn:hover{border-color:var(--accent);color:var(--accent);}
+.int-btn.connected{border-color:var(--accent);color:var(--accent);background:var(--dim);}
+.theme-opts{display:flex;gap:8px;}
+.theme-opt{flex:1;padding:10px;background:var(--bg3);border:2px solid var(--border);border-radius:2px;font-family:var(--font-m);font-size:10px;color:var(--muted);cursor:pointer;text-align:center;transition:all .15s;}
+.theme-opt.active,.theme-opt:hover{border-color:var(--accent);color:var(--accent);}
+.profile-av-big{width:64px;height:64px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:22px;font-weight:900;color:var(--ton);margin-bottom:12px;}
+
+/* ── COMING SOON ── */
+.coming{text-align:center;padding:60px 20px;}
+.cs-tag{display:inline-block;font-family:var(--font-m);font-size:10px;padding:4px 12px;background:var(--dim);color:var(--accent);border:1px solid var(--border2);border-radius:1px;margin-bottom:16px;letter-spacing:.1em;}
+.coming h2{font-family:var(--font-d);font-size:20px;font-weight:700;letter-spacing:.1em;color:var(--text);margin-bottom:7px;}
+.coming p{font-family:var(--font-m);font-size:12px;color:var(--muted);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:20px;right:20px;z-index:9997;background:var(--bg2);border:1px solid var(--border2);border-radius:3px;padding:10px 15px;font-family:var(--font-m);font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(60px);opacity:0;transition:all .3s;}
+@media(max-width:768px){.toast{bottom:80px;left:14px;right:14px;}}
+@media(prefers-color-scheme:dark){.toast{box-shadow:var(--glow);}}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:rgba(77,255,77,.5);color:var(--accent);}
+.toast.error{border-color:rgba(255,68,68,.4);color:var(--red);}
+</style>
+</head>
+<body>
+
+<div class="score-ov"><div class="score-txt" id="score-txt">SCORE!</div></div>
+
+<!-- ════ AUTH ════ -->
+<div id="auth-screen">
+<div class="auth-box">
+  <div class="auth-logo">S.E.N.T.I.N.E.L.</div>
+  <div class="auth-tag">// ad network · intelligence system · v1.3</div>
+  <div class="auth-tabs">
+    <button class="auth-tab active" onclick="switchTab('email',this)">EMAIL</button>
+    <button class="auth-tab" onclick="switchTab('tg',this)">TELEGRAM</button>
+    <button class="auth-tab" onclick="switchTab('gmail',this)">GMAIL</button>
+  </div>
+
+  <!-- EMAIL FORM -->
+  <div id="tf-email" class="auth-form">
+    <input class="auth-input" type="email" id="ae-email" placeholder="your@email.com" onkeydown="if(event.key==='Enter')emailLogin()">
+    <input class="auth-input" type="password" id="ae-pass" placeholder="password" onkeydown="if(event.key==='Enter')emailLogin()">
+    <div class="auth-err" id="ae-err"></div>
+    <button class="auth-btn" onclick="emailLogin()">ACCESS SYSTEM</button>
+  </div>
+
+  <!-- TELEGRAM FORM -->
+  <div id="tf-tg" class="auth-form" style="display:none">
+    <button class="auth-btn tg" onclick="telegramLogin()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.553l-2.952-.924c-.642-.2-.653-.642.136-.953l11.57-4.461c.535-.194 1.003.131.97.906z"/></svg>
+      CONNECT TELEGRAM
+    </button>
+    <div style="font-family:var(--font-m);font-size:10px;color:var(--muted);text-align:center;margin-top:6px">Opens your Telegram bot · your @username becomes your nickname</div>
+  </div>
+
+  <!-- GMAIL FORM -->
+  <div id="tf-gmail" class="auth-form" style="display:none">
+    <button class="auth-btn gmail" onclick="gmailLogin()">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      CONTINUE WITH GMAIL
+    </button>
+    <div style="font-family:var(--font-m);font-size:10px;color:var(--muted);text-align:center;margin-top:6px">Your Google name will be used as display name</div>
+  </div>
+
+  <!-- NICK SETUP STEP -->
+  <div id="nick-step" class="nick-step">
+    <div class="nick-avatar" id="nick-av">?</div>
+    <div style="font-family:var(--font-m);font-size:11px;color:var(--muted);text-align:center">Detected identity. Confirm your callsign:</div>
+    <input class="auth-input" type="text" id="nick-inp" placeholder="Your callsign / nickname">
+    <div class="nick-hint" id="nick-hint"></div>
+    <button class="auth-btn" onclick="confirmNick()">CONFIRM &amp; ENTER</button>
+  </div>
+
+  <button class="auth-demo" onclick="demoLogin()">[ DEMO MODE — SC / ADMIN ]</button>
+</div>
+</div>
+
+<!-- ════ APP ════ -->
+<div id="app">
+  <!-- mobile header -->
+  <div class="mobile-header">
+    <span class="logo-txt" style="font-size:10px">S.E.N.T.I.N.E.L.</span>
+    <div class="mh-actions">
+      <button class="icon-btn" onclick="toggleNotif()" style="font-size:18px">🔔<span class="ndot" id="ndot2"></span></button>
+      <button class="icon-btn" onclick="showPage('settings',null)" style="font-size:18px">⚙</button>
+    </div>
+  </div>
+
+  <!-- sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="logo-block">
+      <div class="logo-txt">S.E.N.T.I.N.E.L.</div>
+      <div class="logo-sub">// ad network · v1.3</div>
+    </div>
+    <button class="nav-item active" id="ni-cockpit" onclick="showPage('cockpit',this)"><span class="nav-icon">◈</span> OPS CENTER</button>
+    <button class="nav-item" id="ni-publishers" onclick="showPage('publishers',this)"><span class="nav-icon">◻</span> PUBLISHERS <span class="nbadge" id="pub-badge">20</span></button>
+    <button class="nav-item" id="ni-deals" onclick="showPage('deals',this)"><span class="nav-icon">◈</span> DEALS <span class="nbadge" id="deals-badge">52</span></button>
+    <button class="nav-item" id="ni-advertisers" onclick="showPage('advertisers',this)"><span class="nav-icon">◻</span> ADVERTISERS <span class="nbadge" id="adv-badge">33</span></button>
+    <button class="nav-item" id="ni-sales" onclick="showPage('sales',this)"><span class="nav-icon">◻</span> SALES</button>
+    <button class="nav-item" id="ni-banned" onclick="showPage('banned',this)"><span class="nav-icon">⊘</span> BANNED <span class="nbadge red">38</span></button>
+    <button class="nav-item" id="ni-settings" onclick="showPage('settings',this)"><span class="nav-icon">⚙</span> SETTINGS</button>
+    <div class="sidebar-bottom">
+      <div class="sb-actions">
+        <button class="icon-btn" onclick="toggleNotif()" title="Notifications">🔔<span class="ndot" id="ndot"></span></button>
+      </div>
+      <div class="user-pill" onclick="showPage('settings',document.getElementById('ni-settings'))">
+        <div class="uav" id="uav">SC</div>
+        <div><div class="uname" id="uname">SC</div><div class="urole" id="urole">admin</div></div>
+      </div>
+      <div class="xp-mini">
+        <div class="xp-mini-row"><span id="xplbl-mini">XP: 0</span><span id="xplvl-mini">LVL 1</span></div>
+        <div class="xp-track"><div class="xp-fill" id="xpfill-mini" style="width:0%"></div></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- mobile bottom nav -->
+  <nav class="mobile-nav">
+    <button class="mnav-item active" id="mn-cockpit" onclick="showPage('cockpit',this,'mn-')"><span class="mnav-icon">◈</span>OPS</button>
+    <button class="mnav-item" id="mn-publishers" onclick="showPage('publishers',this,'mn-')"><span class="mnav-icon">◻</span>PUBS</button>
+    <button class="mnav-item" id="mn-deals" onclick="showPage('deals',this,'mn-')"><span class="mnav-icon">💰</span>DEALS</button>
+    <button class="mnav-item" id="mn-advertisers" onclick="showPage('advertisers',this,'mn-')"><span class="mnav-icon">🎯</span>ADV</button>
+    <button class="mnav-item" id="mn-sales" onclick="showPage('sales',this,'mn-')"><span class="mnav-icon">📅</span>SALES</button>
+    <button class="mnav-item" id="mn-settings" onclick="showPage('settings',this,'mn-')"><span class="mnav-icon">⚙</span>MORE</button>
+  </nav>
+
+  <div class="main">
+
+    <!-- OPS CENTER -->
+    <div class="page active" id="page-cockpit">
+      <div class="page-header">
+        <div class="page-title">// OPS CENTER</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <select class="period-sel" id="period-sel" onchange="renderCockpit()">
+            <option value="1">THIS MONTH</option>
+            <option value="3">LAST 3M</option>
+            <option value="6">LAST 6M</option>
+            <option value="12">LAST YEAR</option>
+            <option value="0" selected>ALL TIME</option>
+          </select>
+          <select class="user-filter-sel" id="user-filter-sel" onchange="renderCockpit()">
+            <option value="all">ALL USERS</option>
+          </select>
+        </div>
+      </div>
+      <div class="stats-row" id="cockpit-stats"></div>
+      <div class="cockpit-grid">
+        <div class="cc"><h3>Monthly profit / revenue</h3><div class="chart-bars" id="cockpit-chart"></div><div style="display:flex;gap:14px;margin-top:8px"><span style="display:flex;align-items:center;gap:5px;font-family:var(--font-m);font-size:9px;color:var(--muted)"><span style="width:8px;height:3px;background:var(--accent);display:inline-block"></span>PROFIT</span><span style="display:flex;align-items:center;gap:5px;font-family:var(--font-m);font-size:9px;color:var(--muted)"><span style="width:8px;height:3px;background:var(--blue);opacity:.6;display:inline-block"></span>REVENUE</span></div></div>
+        <div class="cc"><h3>Top domains by profit</h3><div id="top-domains"></div></div>
+      </div>
+      <div class="cc"><h3>Overall performance</h3><div class="cockpit-metrics" id="cockpit-metrics"></div></div>
+    </div>
+
+    <!-- PUBLISHERS -->
+    <div class="page" id="page-publishers">
+      <div class="page-header"><div class="page-title">// PUBLISHERS</div><button class="add-btn" onclick="openAddPub()">+ ADD</button></div>
+      <div class="stats-row" id="pub-stats"></div>
+      <div class="toolbar">
+        <input class="search-box" type="text" placeholder="> search domain, geo, contact..." id="pub-search" oninput="filterPubs()">
+        <button class="fbtn active" onclick="setPubFilter('all',this)">ALL</button>
+        <button class="fbtn" onclick="setPubFilter('contact',this)">HAS CONTACT</button>
+        <button class="fbtn" onclick="setPubFilter('high',this)">70+</button>
+        <button class="fbtn" onclick="setPubFilter('banned',this)">⊘</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr>
+          <th onclick="sortPubs('domain')">DOMAIN</th>
+          <th onclick="sortPubs('qualityScore')">SCORE ↕</th>
+          <th onclick="sortPubs('monthlyVisits')">VISITS ↕</th>
+          <th>GEO</th><th>CONTACT</th><th>OWNER</th><th>STATUS</th><th>RANK</th>
+        </tr></thead>
+        <tbody id="pub-tbody"></tbody></table>
+        <div class="pagination"><div class="pinfo" id="pinfo"></div><div class="pbtns" id="pbtns"></div></div>
+      </div>
+    </div>
+
+    <!-- DEALS -->
+    <div class="page" id="page-deals">
+      <div class="page-header"><div class="page-title">// DEALS</div><button class="add-btn" onclick="openAddDeal()">+ ADD</button></div>
+      <div class="stats-row" id="deal-stats"></div>
+      <div class="xp-panel"><h3>XP Progress</h3>
+        <div class="xpbig"><div class="xpnum" id="xpnum">0</div><div class="xplbl">experience points</div></div>
+        <div class="xptrack"><div class="xpfill" id="xpfill-big" style="width:0%"></div></div>
+        <div class="xpsub"><span id="xpsub-l">Level 1 — Rookie</span><span id="xpsub-r">next: 1000 XP</span></div>
+      </div>
+      <div id="deals-months"></div>
+    </div>
+
+    <!-- ADVERTISERS -->
+    <div class="page" id="page-advertisers">
+      <div class="page-header"><div class="page-title">// ADVERTISERS</div><button class="add-btn" onclick="openAddAdv()">+ ADD</button></div>
+      <div class="stats-row" id="adv-stats"></div>
+      <div class="toolbar">
+        <input class="search-box" type="text" placeholder="> search brand, vertical..." id="adv-search" oninput="filterAdvs()">
+        <button class="fbtn active" onclick="setAdvFilter('all',this)">ALL</button>
+        <button class="fbtn" onclick="setAdvFilter('active',this)">ACTIVE</button>
+        <button class="fbtn" onclick="setAdvFilter('cams',this)">CAMS</button>
+        <button class="fbtn" onclick="setAdvFilter('dating',this)">DATING</button>
+        <button class="fbtn" onclick="setAdvFilter('aff',this)">AFF</button>
+        <button class="fbtn" onclick="setAdvFilter('paysite',this)">PAYSITE</button>
+      </div>
+      <div class="adv-grid" id="adv-grid"></div>
+    </div>
+
+    <!-- SALES + CALENDAR -->
+    <div class="page" id="page-sales">
+      <div class="page-header"><div class="page-title">// SALES</div><button class="add-btn" onclick="openAddTask()">+ TASK</button></div>
+      <div class="cal-wrap">
+        <div class="cal-header">
+          <div class="cal-title" id="cal-title">MARCH 2026</div>
+          <div class="cal-nav">
+            <button class="cal-nav-btn" onclick="calMove(-1)">←</button>
+            <button class="cal-nav-btn" onclick="calToday()">TODAY</button>
+            <button class="cal-nav-btn" onclick="calMove(1)">→</button>
+          </div>
+        </div>
+        <div class="cal-grid" id="cal-dows"></div>
+        <div class="cal-grid" id="cal-days" style="margin-top:3px"></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <div class="page-title" style="font-size:12px" id="task-date-lbl">ALL TASKS</div>
+        <div style="display:flex;gap:6px">
+          <button class="fbtn active" id="tf-all" onclick="setTaskFilter('all',this)">ALL</button>
+          <button class="fbtn" id="tf-mine" onclick="setTaskFilter('mine',this)">MINE</button>
+          <button class="fbtn" id="tf-open" onclick="setTaskFilter('open',this)">OPEN</button>
+        </div>
+      </div>
+      <div class="tasks-list" id="tasks-list"></div>
+    </div>
+
+    <!-- BANNED -->
+    <div class="page" id="page-banned">
+      <div class="page-header"><div class="page-title">// BANNED DOMAINS</div></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>DOMAIN</th><th>CONTACT</th><th>STATUS</th></tr></thead>
+        <tbody id="banned-tbody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div class="page-header"><div class="page-title">// SETTINGS</div></div>
+      <div class="settings-section">
+        <h3>PROFILE</h3>
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+          <div class="profile-av-big" id="prof-av-big">SC</div>
+          <div>
+            <div style="font-family:var(--font-d);font-size:14px;color:var(--accent)" id="prof-name-big">SC</div>
+            <div style="font-family:var(--font-m);font-size:11px;color:var(--muted)" id="prof-role-big">admin</div>
+            <div style="font-family:var(--font-m);font-size:10px;color:var(--muted2);margin-top:2px" id="prof-email-big">—</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field"><label>Display name / callsign</label><input type="text" id="prof-nick" placeholder="Your callsign"></div>
+          <div class="form-field"><label>Role</label><input type="text" id="prof-role-inp" placeholder="admin / manager" disabled></div>
+        </div>
+        <button class="add-btn" onclick="saveProfile()" style="margin-top:8px">SAVE PROFILE</button>
+      </div>
+      <div class="settings-section">
+        <h3>INTERFACE</h3>
+        <div class="setting-row">
+          <div><div class="setting-lbl">Color theme</div><div class="setting-sub">Follows system by default</div></div>
+        </div>
+        <div class="theme-opts">
+          <div class="theme-opt" onclick="setTheme('light',this)">☀ LIGHT</div>
+          <div class="theme-opt active" onclick="setTheme('system',this)">◑ SYSTEM</div>
+          <div class="theme-opt" onclick="setTheme('dark',this)">● DARK</div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h3>INTEGRATIONS</h3>
+        <div class="integration-card"><div class="int-icon" style="background:#e8f0fe">📧</div><div><div class="int-name">GMAIL</div><div class="int-status" id="gmail-status">Not connected</div></div><button class="int-btn" onclick="connectGmail()">CONNECT</button></div>
+        <div class="integration-card"><div class="int-icon" style="background:#e3f2fd">✈</div><div><div class="int-name">TELEGRAM</div><div class="int-status" id="tg-status">Not connected</div></div><button class="int-btn" onclick="connectTelegram()">CONNECT</button></div>
+        <div class="integration-card"><div class="int-icon" style="background:#e8f5e9">📅</div><div><div class="int-name">GOOGLE CALENDAR</div><div class="int-status">Coming in v2.0</div></div><button class="int-btn" disabled style="opacity:.4">SOON</button></div>
+        <div class="integration-card"><div class="int-icon" style="background:#fff3e0">📄</div><div><div class="int-name">INVOICE NINJA</div><div class="int-status">Coming in v2.0</div></div><button class="int-btn" disabled style="opacity:.4">SOON</button></div>
+      </div>
+      <div class="settings-section">
+        <h3>TEAM METHODOLOGY</h3>
+        <div style="font-family:var(--font-b);font-size:13px;color:var(--text2);line-height:1.8">
+          <p style="margin-bottom:8px"><strong style="font-family:var(--font-m);color:var(--accent)">GTD-LIGHT:</strong> Every pub or adv card has an Owner. Owner is responsible for the next action.</p>
+          <p style="margin-bottom:8px"><strong style="font-family:var(--font-m);color:var(--accent)">DAILY SYNC:</strong> Check Sales calendar each morning. Tasks due today get priority.</p>
+          <p style="margin-bottom:8px"><strong style="font-family:var(--font-m);color:var(--accent)">WALL NOTES:</strong> All communication about a contact lives on its card. Never in chat.</p>
+          <p style="margin-bottom:8px"><strong style="font-family:var(--font-m);color:var(--accent)">DEALS:</strong> When profit hits, log it immediately. SCORE fires. XP is shared motivation.</p>
+          <p><strong style="font-family:var(--font-m);color:var(--accent)">FOLLOW-UP:</strong> If a card has no activity for 7 days — system notifies the owner.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- Magic Wand FAB -->
+<button class="magic-fab" id="magic-fab" onclick="openMagicWand()" title="Magic Wand — find matches" style="display:none">🪄</button>
+
+<!-- NOTIFICATION PANEL -->
+<div class="notif-panel" id="notif-panel">
+  <div class="np-header"><span class="np-title">// NOTIFICATIONS</span><button class="np-close" onclick="toggleNotif()">✕</button></div>
+  <div class="np-list" id="np-list"></div>
+  <button class="np-clear" onclick="clearNotifs()">MARK ALL READ</button>
+</div>
+
+<!-- PUB DETAIL MODAL -->
+<div class="modal-ov" id="pub-modal" onclick="if(event.target===this)closeModal('pub-modal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('pub-modal')">✕</button>
+    <div class="modal-title" id="pm-title"></div>
+    <div id="pm-ban" style="display:none" class="ban-alert">⊘ DOMAIN IS ON BANNED LIST</div>
+    <div class="detail-grid" id="pm-grid"></div>
+    <div class="trblock" id="pm-traffic"></div>
+    <div style="margin-bottom:10px">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">OWNER</div>
+      <div id="pm-owner"></div>
+    </div>
+    <div>
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">NOTES WALL</div>
+      <div id="pm-wall"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="mbtn p" onclick="markContacted()">MARK CONTACTED</button>
+      <button class="mbtn s" onclick="closeModal('pub-modal')">CLOSE</button>
+      <button class="mbtn d" onclick="banPub()">BAN DOMAIN</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADV DETAIL MODAL -->
+<div class="modal-ov" id="adv-modal" onclick="if(event.target===this)closeModal('adv-modal')">
+  <div class="modal" style="max-width:660px">
+    <button class="modal-close" onclick="closeModal('adv-modal')">✕</button>
+    <div class="am-header">
+      <div class="am-icon" id="am-icon">A</div>
+      <div><div class="am-name" id="am-name"></div><div class="am-vert" id="am-vert"></div></div>
+    </div>
+    <div class="req-grid" id="am-req"></div>
+    <div class="detail-grid" id="am-contacts"></div>
+    <div style="margin-bottom:10px">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">OWNER</div>
+      <div id="am-owner"></div>
+    </div>
+    <div class="ssel" id="am-ssel"></div>
+    <div style="margin-top:12px">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">NOTES WALL</div>
+      <div id="am-wall"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="mbtn s" onclick="closeModal('adv-modal')">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PUB MODAL -->
+<div class="modal-ov" id="add-pub-modal" onclick="if(event.target===this)closeModal('add-pub-modal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('add-pub-modal')">✕</button>
+    <div class="modal-title">ADD PUBLISHER</div>
+    <div class="form-row"><div class="form-field"><label>Domain</label><input type="text" id="fp-domain" placeholder="example.com"></div><div class="form-field"><label>Contact</label><input type="text" id="fp-contact" placeholder="skype / email"></div></div>
+    <div class="form-row"><div class="form-field"><label>Contact type</label><select id="fp-ctype"><option>Skype</option><option>Email</option><option>Telegram</option><option>Discord</option><option>Other</option></select></div><div class="form-field"><label>Monthly visits</label><input type="number" id="fp-visits" placeholder="1000000"></div></div>
+    <div class="form-row"><div class="form-field"><label>Top GEO</label><input type="text" id="fp-geo" placeholder="US, DE, UK"></div><div class="form-field"><label>Search %</label><input type="number" id="fp-search" placeholder="45"></div></div>
+    <div class="form-row"><div class="form-field"><label>Direct %</label><input type="number" id="fp-direct" placeholder="30"></div><div class="form-field"><label>Referral %</label><input type="number" id="fp-ref" placeholder="25"></div></div>
+    <div class="modal-actions"><button class="mbtn p" onclick="addPub()">ADD PUBLISHER</button><button class="mbtn s" onclick="closeModal('add-pub-modal')">CANCEL</button></div>
+  </div>
+</div>
+
+<!-- ADD DEAL MODAL -->
+<div class="modal-ov" id="add-deal-modal" onclick="if(event.target===this)closeModal('add-deal-modal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('add-deal-modal')">✕</button>
+    <div class="modal-title">ADD DEAL</div>
+    <div class="form-row"><div class="form-field"><label>Domain / Site</label><input type="text" id="fd-domain" placeholder="example.com - pops"></div><div class="form-field"><label>Advertiser</label><input type="text" id="fd-adv" placeholder="AdWorldMedia"></div></div>
+    <div class="form-row"><div class="form-field"><label>Buy ($)</label><input type="number" id="fd-buy" placeholder="8000"></div><div class="form-field"><label>Sell ($)</label><input type="number" id="fd-sell" placeholder="16500"></div></div>
+    <div class="form-row"><div class="form-field"><label>Month</label><select id="fd-month"><option>Jan</option><option>Feb</option><option>Mar</option><option>Apr</option><option>May</option><option>Jun</option><option>Jul</option><option>Aug</option><option>Sep</option><option>Oct</option><option>Nov</option><option>Dec</option></select></div><div class="form-field"><label>Year</label><input type="number" id="fd-year" value="2026"></div></div>
+    <div class="modal-actions"><button class="mbtn p" onclick="addDeal()">ADD DEAL</button><button class="mbtn s" onclick="closeModal('add-deal-modal')">CANCEL</button></div>
+  </div>
+</div>
+
+<!-- ADD ADV MODAL -->
+<div class="modal-ov" id="add-adv-modal" onclick="if(event.target===this)closeModal('add-adv-modal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('add-adv-modal')">✕</button>
+    <div class="modal-title">ADD ADVERTISER</div>
+    <div class="form-row"><div class="form-field"><label>Brand</label><input type="text" id="fa-brand" placeholder="AdWorldMedia"></div><div class="form-field"><label>Vertical</label><select id="fa-vert"><option>Cams</option><option>Dating</option><option>Paysite</option><option>Aff Network</option><option>Gambling</option><option>Carrier Billing</option><option>Other</option></select></div></div>
+    <div class="form-row"><div class="form-field"><label>Contact name</label><input type="text" id="fa-name" placeholder="John"></div><div class="form-field"><label>Channel</label><select id="fa-ch"><option>Skype</option><option>Email</option><option>Telegram</option><option>Other</option></select></div></div>
+    <div class="form-row"><div class="form-field"><label>Contact ID</label><input type="text" id="fa-contact" placeholder="live:example or email"></div><div class="form-field"><label>Alt. contact</label><input type="text" id="fa-contact2" placeholder="email@example.com"></div></div>
+    <div class="form-row"><div class="form-field"><label>Target GEO</label><input type="text" id="fa-geo" placeholder="US, DE, UK"></div><div class="form-field"><label>Ad formats</label><input type="text" id="fa-formats" placeholder="Pops, Interstitial"></div></div>
+    <div class="modal-actions"><button class="mbtn p" onclick="addAdv()">ADD ADVERTISER</button><button class="mbtn s" onclick="closeModal('add-adv-modal')">CANCEL</button></div>
+  </div>
+</div>
+
+<!-- ADD TASK MODAL -->
+<div class="modal-ov" id="add-task-modal" onclick="if(event.target===this)closeModal('add-task-modal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('add-task-modal')">✕</button>
+    <div class="modal-title">ADD TASK</div>
+    <div class="form-row"><div class="form-field" style="grid-column:1/-1"><label>Task</label><input type="text" id="ft-text" placeholder="Follow up with Jack at AdWorldMedia..."></div></div>
+    <div class="form-row"><div class="form-field"><label>Date</label><input type="date" id="ft-date"></div><div class="form-field"><label>Assign to</label><select id="ft-assign"></select></div></div>
+    <div class="form-row"><div class="form-field"><label>Type</label><select id="ft-type"><option value="task">Task</option><option value="followup">Follow-up</option><option value="deal">Deal</option><option value="deadline">Deadline</option></select></div><div class="form-field"><label>Related to</label><input type="text" id="ft-rel" placeholder="domain / brand name"></div></div>
+    <div class="modal-actions"><button class="mbtn p" onclick="addTask()">ADD TASK</button><button class="mbtn s" onclick="closeModal('add-task-modal')">CANCEL</button></div>
+  </div>
+</div>
+
+<!-- MAGIC WAND MODAL -->
+<div class="modal-ov" id="wand-modal" onclick="if(event.target===this)closeModal('wand-modal')">
+  <div class="modal" style="max-width:680px">
+    <button class="modal-close" onclick="closeModal('wand-modal')">✕</button>
+    <div class="modal-title">🪄 MAGIC WAND — MATCH SUGGESTIONS</div>
+    <div style="font-family:var(--font-m);font-size:11px;color:var(--muted);margin-bottom:16px">S.E.N.T.I.N.E.L. analyses quality scores, GEO overlap and vertical fit to suggest optimal pub ↔ advertiser pairs.</div>
+    <div id="wand-results"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
+const BANNED_LIST = ["mypornhere.com","xxxpicz.com","megapornx.com","justpicsplease.com","momzr.com","xxxpornozone.com","milfzr.com","hentairider.com","freehdinterracialporn.in","freepornpicss.com","1freeporn.net","fullfamilysex.com","babybottle.net","xxxnude.me","nudegirlpics.net","3movs.com","pornhub.com","youporn.com","redtube.com","tube8.com","xvideos.com","xhamster.com","pornhub.net","thumbzilla.com","drtuber.com","nuvid.com","tnaflix.com","pornerbros.com","slutload.com","keezmovies.com","xbabe.com","madthumbs.com","viptube.com","alphaporno.com","pervertslut.com","jizzbo.com","fapvid.com","jizzbunker.com"];
+
+// Pre-registered users (email login)
+const PRE_USERS = [
+  {id:'sc',nick:'SC',email:'sc@sentinel.app',password:'sentinel2024',role:'admin',color:'#4dff4d'},
+  {id:'scout',nick:'Scout',email:'scout@sentinel.app',password:'scout2024',role:'manager',color:'#4d9fff'},
+];
+let currentUser = null;
+let pendingAuth = null; // {provider, suggestedNick, email, name}
+
+const MONTHLY_STATS = [
+  {month:'Feb',year:2025,mnum:2,buy:11525,sell:19200,profit:7675,owner:'sc'},
+  {month:'Mar',year:2025,mnum:3,buy:11525,sell:19200,profit:7675,owner:'sc'},
+  {month:'Apr',year:2025,mnum:4,buy:21095,sell:38930,profit:17835,owner:'sc'},
+  {month:'May',year:2025,mnum:5,buy:25625,sell:45500,profit:19875,owner:'sc'},
+  {month:'Jun',year:2025,mnum:6,buy:25625,sell:45500,profit:19875,owner:'sc'},
+  {month:'Jul',year:2025,mnum:7,buy:25625,sell:45500,profit:19875,owner:'sc'},
+  {month:'Aug',year:2025,mnum:8,buy:25975,sell:42600,profit:16625,owner:'sc'},
+  {month:'Sep',year:2025,mnum:9,buy:18575,sell:37400,profit:18825,owner:'sc'},
+  {month:'Oct',year:2025,mnum:10,buy:25767,sell:48839,profit:23072,owner:'sc'},
+  {month:'Nov',year:2025,mnum:11,buy:20475,sell:40000,profit:19525,owner:'sc'},
+  {month:'Dec',year:2025,mnum:12,buy:20475,sell:40000,profit:19525,owner:'sc'},
+  {month:'Jan',year:2026,mnum:1,buy:20475,sell:40000,profit:19525,owner:'sc'},
+  {month:'Feb',year:2026,mnum:2,buy:23405,sell:32730,profit:9325,owner:'sc'},
+];
+
+let DEALS = [
+  {id:1,month:'Feb',year:2025,domain:'yesporn.vip',advertiser:'AdWorldMedia',buy:2600,sell:4800,profit:2200,owner:'sc'},
+  {id:2,month:'Feb',year:2025,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:3,month:'Feb',year:2025,domain:'Periteen - POPs',advertiser:'AdWorldMedia',buy:900,sell:2500,profit:1600,owner:'sc'},
+  {id:4,month:'Feb',year:2025,domain:'Block IDs',advertiser:'AdWorldMedia',buy:5950,sell:9200,profit:3250,owner:'sc'},
+  {id:5,month:'Mar',year:2025,domain:'yesporn.vip',advertiser:'AdWorldMedia',buy:2600,sell:4800,profit:2200,owner:'sc'},
+  {id:6,month:'Mar',year:2025,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:7,month:'Mar',year:2025,domain:'Block IDs',advertiser:'AdWorldMedia',buy:5950,sell:9200,profit:3250,owner:'sc'},
+  {id:8,month:'Apr',year:2025,domain:'Picazor - Interstitial',advertiser:'AdWorldMedia',buy:8000,sell:16500,profit:8500,owner:'sc'},
+  {id:9,month:'Apr',year:2025,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:10,month:'Apr',year:2025,domain:'Nhentai',advertiser:'AdWorldMedia',buy:5070,sell:10530,profit:5460,owner:'sc'},
+  {id:11,month:'Apr',year:2025,domain:'Block IDs',advertiser:'AdWorldMedia',buy:5950,sell:9200,profit:3250,owner:'sc'},
+  {id:12,month:'May',year:2025,domain:'Picazor - Interstitial',advertiser:'AdWorldMedia',buy:8000,sell:16500,profit:8500,owner:'sc'},
+  {id:13,month:'May',year:2025,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:14,month:'May',year:2025,domain:'Nhentai',advertiser:'AdWorldMedia',buy:9000,sell:16000,profit:7000,owner:'sc'},
+  {id:15,month:'May',year:2025,domain:'Nude-beauty.net Network',advertiser:'AdWorldMedia',buy:600,sell:1100,profit:500,owner:'sc'},
+  {id:16,month:'May',year:2025,domain:'Block IDs',advertiser:'AdWorldMedia',buy:5950,sell:9200,profit:3250,owner:'sc'},
+  {id:17,month:'Jun',year:2025,domain:'Picazor - Interstitial',advertiser:'AdWorldMedia',buy:8000,sell:16500,profit:8500,owner:'sc'},
+  {id:18,month:'Jun',year:2025,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:19,month:'Jun',year:2025,domain:'Nhentai',advertiser:'AdWorldMedia',buy:9000,sell:16000,profit:7000,owner:'sc'},
+  {id:20,month:'Jun',year:2025,domain:'Block IDs',advertiser:'AdWorldMedia',buy:5950,sell:9200,profit:3250,owner:'sc'},
+  {id:21,month:'Jul',year:2025,domain:'Picazor - Interstitial',advertiser:'AdWorldMedia',buy:8000,sell:16500,profit:8500,owner:'sc'},
+  {id:22,month:'Jul',year:2025,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:23,month:'Jul',year:2025,domain:'Nhentai',advertiser:'AdWorldMedia',buy:9000,sell:16000,profit:7000,owner:'sc'},
+  {id:24,month:'Jul',year:2025,domain:'Block IDs',advertiser:'AdWorldMedia',buy:5950,sell:9200,profit:3250,owner:'sc'},
+  {id:25,month:'Aug',year:2025,domain:'Picazor - Interstitial',advertiser:'AdWorldMedia',buy:8000,sell:16500,profit:8500,owner:'sc'},
+  {id:26,month:'Aug',year:2025,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:27,month:'Aug',year:2025,domain:'vxxx.com',advertiser:'AdWorldMedia',buy:7000,sell:11400,profit:4400,owner:'sc'},
+  {id:28,month:'Aug',year:2025,domain:'inporn.com',advertiser:'AdWorldMedia',buy:8900,sell:12000,profit:3100,owner:'sc'},
+  {id:29,month:'Sep',year:2025,domain:'Picazor - Interstitial',advertiser:'AdWorldMedia',buy:8000,sell:16500,profit:8500,owner:'sc'},
+  {id:30,month:'Sep',year:2025,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:31,month:'Sep',year:2025,domain:'ultrathots.com',advertiser:'AdWorldMedia',buy:8000,sell:16700,profit:8700,owner:'sc'},
+  {id:32,month:'Oct',year:2025,domain:'Picazor - Interstitial',advertiser:'AdWorldMedia',buy:8000,sell:16500,profit:8500,owner:'sc'},
+  {id:33,month:'Oct',year:2025,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:34,month:'Oct',year:2025,domain:'ultrathots.com',advertiser:'AdWorldMedia',buy:8000,sell:16700,profit:8700,owner:'sc'},
+  {id:35,month:'Oct',year:2025,domain:'Traforama',advertiser:'AdWorldMedia',buy:7192,sell:11439,profit:4247,owner:'sc'},
+  {id:36,month:'Nov',year:2025,domain:'Picazor - Interstitial',advertiser:'AdWorldMedia',buy:8000,sell:16500,profit:8500,owner:'sc'},
+  {id:37,month:'Nov',year:2025,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:38,month:'Nov',year:2025,domain:'ultrathots.com',advertiser:'AdWorldMedia',buy:7000,sell:14000,profit:7000,owner:'sc'},
+  {id:39,month:'Nov',year:2025,domain:'Ibradome.com',advertiser:'AdWorldMedia',buy:2700,sell:5300,profit:2600,owner:'sc'},
+  {id:40,month:'Dec',year:2025,domain:'Picazor - Interstitial',advertiser:'AdWorldMedia',buy:8000,sell:16500,profit:8500,owner:'sc'},
+  {id:41,month:'Dec',year:2025,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:42,month:'Dec',year:2025,domain:'ultrathots.com',advertiser:'AdWorldMedia',buy:7000,sell:14000,profit:7000,owner:'sc'},
+  {id:43,month:'Dec',year:2025,domain:'Ibradome.com',advertiser:'AdWorldMedia',buy:2700,sell:5300,profit:2600,owner:'sc'},
+  {id:44,month:'Dec',year:2025,domain:'tsthots.com',advertiser:'AdWorldMedia',buy:700,sell:1500,profit:800,owner:'sc'},
+  {id:45,month:'Jan',year:2026,domain:'Picazor - Interstitial',advertiser:'AdWorldMedia',buy:8000,sell:16500,profit:8500,owner:'sc'},
+  {id:46,month:'Jan',year:2026,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:47,month:'Jan',year:2026,domain:'ultrathots.com',advertiser:'AdWorldMedia',buy:7000,sell:14000,profit:7000,owner:'sc'},
+  {id:48,month:'Jan',year:2026,domain:'Ibradome.com',advertiser:'AdWorldMedia',buy:2700,sell:5300,profit:2600,owner:'sc'},
+  {id:49,month:'Jan',year:2026,domain:'tsthots.com',advertiser:'AdWorldMedia',buy:700,sell:1500,profit:800,owner:'sc'},
+  {id:50,month:'Feb',year:2026,domain:'Celebsroulette.com - pops',advertiser:'AdWorldMedia',buy:2075,sell:2700,profit:625,owner:'sc'},
+  {id:51,month:'Feb',year:2026,domain:'jizzbunker+',advertiser:'AdWorldMedia',buy:12750,sell:17550,profit:4800,owner:'sc'},
+  {id:52,month:'Feb',year:2026,domain:'pornhits.com',advertiser:'AdWorldMedia',buy:8580,sell:12480,profit:3900,owner:'sc'},
+];
+
+let PUBS = [
+  {id:1,domain:"nifty.org",contact:"bbeerrnnii1",contactType:"Skype",monthlyVisits:3400000,topGeo:"US, UK, DE, CA, AU",searchPct:67.6,directPct:23.5,referralPct:7.7,qualityScore:59.3,banned:false,status:"new",owner:"sc",wall:[]},
+  {id:2,domain:"naijauncut.com",contact:"live:.cid.d518fdf2b53ad009",contactType:"Skype",monthlyVisits:1000000,topGeo:"NG, US, CA, UK, DE",searchPct:48.4,directPct:37.1,referralPct:12.3,qualityScore:52.9,banned:false,status:"new",owner:"sc",wall:[]},
+  {id:3,domain:"kaotic.com",contact:"",contactType:"",monthlyVisits:6300000,topGeo:"US, DE, NL, CA, UK",searchPct:18.1,directPct:70.7,referralPct:10.8,qualityScore:48.1,banned:false,status:"new",owner:"",wall:[]},
+  {id:4,domain:"efukt.com",contact:"",contactType:"",monthlyVisits:7500000,topGeo:"US, DE, UK, CA, FR",searchPct:16.6,directPct:40.8,referralPct:42.3,qualityScore:32.1,banned:false,status:"new",owner:"",wall:[]},
+  {id:5,domain:"mikesouth.com",contact:"",contactType:"",monthlyVisits:133900,topGeo:"US, DE, CA, UK, NL",searchPct:47.8,directPct:36.2,referralPct:13.6,qualityScore:52.1,banned:false,status:"new",owner:"sc",wall:[]},
+  {id:6,domain:"inhumanity.com",contact:"",contactType:"",monthlyVisits:2600000,topGeo:"US, DE, UK, CA, FR",searchPct:10.8,directPct:40.3,referralPct:48.7,qualityScore:27.7,banned:false,status:"new",owner:"",wall:[]},
+  {id:7,domain:"crazyshit.com",contact:"",contactType:"",monthlyVisits:5600000,topGeo:"US, DE, UK, SE, PL",searchPct:14.1,directPct:56.4,referralPct:29.3,qualityScore:38.1,banned:false,status:"new",owner:"",wall:[]},
+  {id:8,domain:"analdin.com",contact:"dmitriy-zico",contactType:"Skype",monthlyVisits:0,topGeo:"",searchPct:0,directPct:0,referralPct:0,qualityScore:20,banned:false,status:"new",owner:"sc",wall:[]},
+  {id:9,domain:"aznudes.com",contact:"contact@aznude.com",contactType:"Email",monthlyVisits:51000000,topGeo:"US",searchPct:0,directPct:0,referralPct:0,qualityScore:20,banned:false,status:"new",owner:"sc",wall:[]},
+  {id:10,domain:"modelsociety.com",contact:"academy@modelsociety.com",contactType:"Email",monthlyVisits:345600,topGeo:"US, UK, MX, GE",searchPct:0,directPct:0,referralPct:0,qualityScore:0,banned:false,status:"new",owner:"",wall:[]},
+  {id:11,domain:"boobsrealm.com",contact:"ravenazrael@gmail.com",contactType:"Email",monthlyVisits:296300,topGeo:"US, UK, RU, SP, GE",searchPct:0,directPct:0,referralPct:0,qualityScore:0,banned:false,status:"new",owner:"",wall:[]},
+  {id:12,domain:"hentaifromhell.org",contact:"admin@hentaifromhell.org",contactType:"Email",monthlyVisits:191100,topGeo:"US, TH, GE, CA",searchPct:0,directPct:0,referralPct:0,qualityScore:0,banned:false,status:"new",owner:"",wall:[]},
+  {id:13,domain:"TheYNC.com",contact:"michaelbay96",contactType:"Skype",monthlyVisits:0,topGeo:"",searchPct:0,directPct:0,referralPct:0,qualityScore:20,banned:false,status:"new",owner:"",wall:[]},
+  {id:14,domain:"sharesome.com",contact:"live:.cid.c196e588ee167c7c",contactType:"Skype",monthlyVisits:0,topGeo:"",searchPct:0,directPct:0,referralPct:0,qualityScore:20,banned:false,status:"new",owner:"",wall:[]},
+  {id:15,domain:"adult-channels.com",contact:"drumevil",contactType:"Skype",monthlyVisits:0,topGeo:"",searchPct:0,directPct:0,referralPct:0,qualityScore:20,banned:false,status:"new",owner:"",wall:[]},
+  {id:16,domain:"tubev.sex",contact:"support@tubev.sex",contactType:"Email",monthlyVisits:852600,topGeo:"GE, BG, US, JP",searchPct:0,directPct:0,referralPct:0,qualityScore:0,banned:false,status:"new",owner:"",wall:[]},
+  {id:17,domain:"painaltube.com",contact:"",contactType:"",monthlyVisits:470060,topGeo:"US, DE, FR, UK, AU",searchPct:20.6,directPct:31.4,referralPct:47.3,qualityScore:30.3,banned:false,status:"new",owner:"",wall:[]},
+  {id:18,domain:"fleshed.com",contact:"",contactType:"",monthlyVisits:2300000,topGeo:"US, DE, UK, CA, FR",searchPct:11.4,directPct:29.2,referralPct:58.8,qualityScore:22.7,banned:false,status:"new",owner:"",wall:[]},
+  {id:19,domain:"xxx-gays.com",contact:"advertiser@xxx-gays.com",contactType:"Email",monthlyVisits:186000,topGeo:"US, GE, FR, BR, IT",searchPct:0,directPct:0,referralPct:0,qualityScore:0,banned:false,status:"new",owner:"",wall:[]},
+  {id:20,domain:"watch.porn",contact:"b873.r2@proton.me",contactType:"Email",monthlyVisits:0,topGeo:"",searchPct:0,directPct:0,referralPct:0,qualityScore:20,banned:false,status:"new",owner:"",wall:[]},
+];
+PUBS.forEach(p=>{if(BANNED_LIST.includes(p.domain.toLowerCase()))p.banned=true;});
+
+let ADVS = [
+  {id:1,brand:"AdWorldMedia",vertical:"Cams",name:"Jack",channel:"Skype",contact:"live:.cid.e711c9370194a0e0",contact2:"",geo:"US, UK, DE",formats:"Pops, Interstitial",status:"active",owner:"sc",wall:[],notes:"Main partner — Picazor, ultrathots, celebsroulette."},
+  {id:2,brand:"Babestation",vertical:"Cams",name:"Bryn",channel:"Skype",contact:"brynmusicism",contact2:"",geo:"UK, US",formats:"Pops",status:"active",owner:"sc",wall:[],notes:""},
+  {id:3,brand:"Advery",vertical:"Aff Network",name:"Alexey",channel:"Skype",contact:"live:byriq56ukr",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:4,brand:"Rabbits",vertical:"Cams",name:"David",channel:"Skype",contact:"rabbitsmarketing",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:5,brand:"AdExtreme",vertical:"Dating",name:"Cedric",channel:"Skype",contact:"neo_masterstudio",contact2:"",geo:"FR",formats:"",status:"prospect",owner:"",wall:[],notes:"Dating FR"},
+  {id:6,brand:"Live Jasmin",vertical:"Cams",name:"Andrea TwinRed",channel:"Skype",contact:"live:andrea_14862",contact2:"",geo:"US, DE, FR",formats:"",status:"active",owner:"sc",wall:[],notes:"Via TwinRed"},
+  {id:7,brand:"Stripchat",vertical:"Cams",name:"Leo",channel:"Skype",contact:"ambasciatore30",contact2:"",geo:"US, DE, UK",formats:"",status:"active",owner:"sc",wall:[],notes:""},
+  {id:8,brand:"Bang",vertical:"Paysite",name:"Payton",channel:"Skype",contact:"paytonjass",contact2:"",geo:"US",formats:"",status:"active",owner:"sc",wall:[],notes:""},
+  {id:9,brand:"Adult Friend Finder",vertical:"Dating",name:"Katie",channel:"Skype",contact:"kdillon_ffn",contact2:"",geo:"US, UK, CA",formats:"",status:"active",owner:"sc",wall:[],notes:"Dating/Cams"},
+  {id:10,brand:"Traffic Partner",vertical:"Aff Network",name:"Nelly",channel:"Skype",contact:"nedyalka.garova.dp",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:11,brand:"Annaci LTD",vertical:"Dating",name:"Maor",channel:"Skype",contact:"maor.demri1",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:12,brand:"Wister",vertical:"Carrier Billing",name:"Rebecca",channel:"Skype",contact:"live:rebeccafang1995",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:13,brand:"Twistbox",vertical:"Carrier Billing",name:"Lemmond",channel:"Skype",contact:"lernmond",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:14,brand:"Streamate",vertical:"Cams",name:"",channel:"Skype",contact:"",contact2:"",geo:"US",formats:"",status:"prospect",owner:"",wall:[],notes:"Need skype or email"},
+  {id:15,brand:"Studio20",vertical:"Cams",name:"Mugur",channel:"Skype",contact:"mugurfrunzetti",contact2:"",geo:"US, EU",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:16,brand:"Erstie",vertical:"Paysite",name:"Karim",channel:"Skype",contact:"karimc1990",contact2:"",geo:"",formats:"Preroll",status:"active",owner:"sc",wall:[],notes:"PREROLL format"},
+  {id:17,brand:"MindGeek",vertical:"Paysite",name:"Garo",channel:"Skype",contact:"live:garo.mindgeek",contact2:"",geo:"US, DE, UK",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:18,brand:"Together Network",vertical:"Aff Network",name:"Svetlana",channel:"Skype",contact:"live:svetlana.ostroglyad",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:19,brand:"Reallifecams",vertical:"Cams",name:"Alisya",channel:"Skype",contact:"allissia_skype",contact2:"ads@reallifecam.com",geo:"",formats:"",status:"active",owner:"sc",wall:[],notes:"In CRM already"},
+  {id:20,brand:"Kolosize",vertical:"Other",name:"Morgan",channel:"Skype",contact:"morgan.plzr",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:"ED vertical"},
+  {id:21,brand:"Parimatch",vertical:"Gambling",name:"Michael",channel:"Skype",contact:"michael.day.ua",contact2:"m.dei@pmi.bet",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:22,brand:"Bellesa Enterprises",vertical:"Paysite",name:"Alexandr",channel:"Skype",contact:"abale.lavasoft",contact2:"bellesads@gmail.com",geo:"US, CA",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:23,brand:"VS Media Inc",vertical:"Cams",name:"Ryder",channel:"Skype",contact:"live:ryan.vsmedia",contact2:"flirt4free@gmail.com",geo:"US",formats:"",status:"prospect",owner:"",wall:[],notes:"Flirt4Free"},
+  {id:24,brand:"Gammae",vertical:"Paysite",name:"Thissan",channel:"Email",contact:"live:.cid.cea5b0b2e7a0f334",contact2:"gammaetrans@gmail.com",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:25,brand:"Crakrevenue",vertical:"Aff Network",name:"Antony",channel:"Skype",contact:"live:.cid.b0634cb0510f3104",contact2:"adnet1@crakmedia.com",geo:"US, CA",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:26,brand:"Madcheddar",vertical:"Paysite",name:"James",channel:"Skype",contact:"live:james_24187",contact2:"sales@kodify.io",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:"Kodify"},
+  {id:27,brand:"Digital Diamond",vertical:"Aff Network",name:"Andrew Zana",channel:"Skype",contact:"live:be1dfe502382ddba",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:28,brand:"Digiworld Partners",vertical:"Dating",name:"Nigel",channel:"Skype",contact:"diginige",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:29,brand:"AdultForce",vertical:"Paysite",name:"Ivy",channel:"Skype",contact:"",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:"Paysite/Games"},
+  {id:30,brand:"Admolly",vertical:"Aff Network",name:"Fabian",channel:"Skype",contact:"fabian.schotel",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:31,brand:"Cmetrix",vertical:"Aff Network",name:"Doru",channel:"Skype",contact:"doru.pm",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:32,brand:"VisitX",vertical:"Cams",name:"",channel:"",contact:"",contact2:"",geo:"DE",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+  {id:33,brand:"Allied Info Tech",vertical:"Other",name:"",channel:"Email",contact:"media@alliedinfotech.in",contact2:"",geo:"",formats:"",status:"prospect",owner:"",wall:[],notes:""},
+];
+
+let TASKS = [
+  {id:1,text:"Follow up with Jack — Feb deal confirmation",date:"2026-03-25",assignTo:"sc",type:"followup",rel:"AdWorldMedia",done:false},
+  {id:2,text:"Research nhentai.net traffic stats",date:"2026-03-27",assignTo:"sc",type:"task",rel:"nhentai",done:false},
+  {id:3,text:"Send invoice for Jan deals",date:"2026-03-28",assignTo:"sc",type:"deadline",rel:"",done:false},
+  {id:4,text:"Check Stripchat pops performance",date:"2026-04-01",assignTo:"sc",type:"task",rel:"Stripchat",done:false},
+];
+
+let NOTIFS = [];
+let XP = 0;
+const XP_LEVELS = [{xp:0,lbl:'Rookie'},{xp:500,lbl:'Operator'},{xp:1500,lbl:'Dealer'},{xp:4000,lbl:'Agent'},{xp:10000,lbl:'Director'},{xp:25000,lbl:'Legend'}];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// ══════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════
+function switchTab(tab, btn) {
+  document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['email','tg','gmail'].forEach(t=>document.getElementById('tf-'+t).style.display='none');
+  document.getElementById('tf-'+tab).style.display='flex';
+  document.getElementById('nick-step').classList.remove('active');
+}
+
+function emailLogin() {
+  const email = document.getElementById('ae-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('ae-pass').value;
+  const pre   = PRE_USERS.find(u=>u.email===email && u.password===pass);
+  if(pre){ launchApp({id:pre.id,nick:pre.nick,email:pre.email,role:pre.role,color:pre.color}); return; }
+  // New user flow — extract suggested name from email
+  if(!email.includes('@')){ document.getElementById('ae-err').textContent='// INVALID EMAIL'; return; }
+  const suggested = email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  pendingAuth = {provider:'email', email, suggestedNick: suggested, role:'manager', color:'#4d9fff'};
+  showNickStep(suggested);
+}
+
+function gmailLogin() {
+  // Simulate Gmail — in production use Google OAuth
+  const suggested = 'Google User';
+  pendingAuth = {provider:'gmail', email:'user@gmail.com', suggestedNick: suggested, role:'manager', color:'#4285f4'};
+  showToast('GMAIL: demo mode — set your callsign','success');
+  showNickStep(suggested);
+}
+
+function telegramLogin() {
+  window.open('https://t.me/YOUR_BOT?start=auth','_blank');
+  // Simulate TG nick
+  pendingAuth = {provider:'telegram', email:'', suggestedNick:'@username', role:'manager', color:'#4d9fff'};
+  showNickStep('@username');
+  showToast('OPEN YOUR BOT · SET CALLSIGN','success');
+}
+
+function showNickStep(suggested) {
+  ['tf-email','tf-tg','tf-gmail'].forEach(id=>document.getElementById(id).style.display='none');
+  const step = document.getElementById('nick-step');
+  step.classList.add('active');
+  document.getElementById('nick-inp').value = suggested;
+  document.getElementById('nick-hint').textContent = '// detected: ' + (pendingAuth.provider==='telegram'?'Telegram username':pendingAuth.email);
+  const initials = suggested.replace('@','').split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase()||'??';
+  const av = document.getElementById('nick-av');
+  av.textContent = initials;
+  av.style.background = pendingAuth.color||'var(--accent)';
+}
+
+function confirmNick() {
+  if(!pendingAuth) return;
+  const nick = document.getElementById('nick-inp').value.trim() || pendingAuth.suggestedNick;
+  const id = 'u_' + Date.now();
+  launchApp({id, nick, email: pendingAuth.email, role: pendingAuth.role, color: pendingAuth.color});
+  pendingAuth = null;
+}
+
+function demoLogin() { launchApp({id:'sc',nick:'SC',email:'sc@sentinel.app',role:'admin',color:'#4dff4d'}); }
+
+function launchApp(user) {
+  currentUser = user;
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('magic-fab').style.display='flex';
+
+  const initials = user.nick.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase()||user.nick.slice(0,2).toUpperCase();
+  document.getElementById('uav').textContent = initials;
+  document.getElementById('uav').style.background = user.color;
+  document.getElementById('uname').textContent = user.nick;
+  document.getElementById('urole').textContent = user.role + (user.email?' · '+user.email:'');
+  document.getElementById('prof-av-big').textContent = initials;
+  document.getElementById('prof-av-big').style.background = user.color;
+  document.getElementById('prof-av-big').style.color = 'var(--ton)';
+  document.getElementById('prof-name-big').textContent = user.nick;
+  document.getElementById('prof-role-big').textContent = user.role;
+  document.getElementById('prof-email-big').textContent = user.email||'—';
+  document.getElementById('prof-nick').value = user.nick;
+  document.getElementById('prof-role-inp').value = user.role;
+
+  // populate user filter
+  const uf = document.getElementById('user-filter-sel');
+  uf.innerHTML = '<option value="all">ALL USERS</option>';
+  PRE_USERS.concat([user]).filter((u,i,a)=>a.findIndex(x=>x.id===u.id)===i).forEach(u=>{
+    const o = document.createElement('option');
+    o.value=u.id; o.textContent=u.nick||u.id;
+    uf.appendChild(o);
+  });
+
+  // populate task assign
+  const ta = document.getElementById('ft-assign');
+  ta.innerHTML = '';
+  PRE_USERS.concat([user]).filter((u,i,a)=>a.findIndex(x=>x.id===u.id)===i).forEach(u=>{
+    const o=document.createElement('option'); o.value=u.id; o.textContent=u.nick||u.id; ta.appendChild(o);
+  });
+
+  XP = DEALS.filter(d=>canSeeDeal(d)).reduce((a,b)=>a+Math.min(b.profit,1000),0);
+  updateXP();
+  addNotif('sys','System ready','S.E.N.T.I.N.E.L. v1.3 initialised. Welcome, '+user.nick+'.');
+  addNotif('sales','Deals pending','Feb 2026 has 3 deals — confirm profit figures.');
+  addNotif('personal','Follow-up reminder',PUBS.filter(p=>!p.owner||p.wall.length===0).length+' publishers have no owner assigned.');
+  renderCockpit(); renderPubStats(); filterPubs(); renderDeals();
+  renderBanned(); renderAdvStats(); filterAdvs(); renderCalendar();
+}
+
+function canSeeDeal(d) {
+  if(!currentUser) return false;
+  if(currentUser.role==='admin') return true;
+  return d.owner===currentUser.id;
+}
+function canSee(item) {
+  if(!currentUser) return false;
+  if(currentUser.role==='admin') return true;
+  return item.owner===currentUser.id;
+}
+
+// ══════════════════════════════════════════════════
+// NOTIFICATIONS
+// ══════════════════════════════════════════════════
+function addNotif(type,title,msg){
+  NOTIFS.unshift({id:Date.now(),type,title,msg,ts:new Date(),read:false});
+  renderNotifs();
+}
+function renderNotifs(){
+  const unread=NOTIFS.filter(n=>!n.read).length;
+  ['ndot','ndot2'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('show',unread>0);});
+  const list=document.getElementById('np-list');
+  if(!list)return;
+  list.innerHTML=NOTIFS.length?NOTIFS.map(n=>{
+    const ts=new Date(n.ts).toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit'})+' · '+new Date(n.ts).toLocaleDateString('en',{day:'2-digit',month:'short'});
+    return`<div class="ni ${n.type} ${n.read?'':'unread'}" onclick="markRead(${n.id})">
+      <div class="ni-type">${n.type.toUpperCase()}</div>
+      <div class="ni-title">${n.title}</div>
+      <div class="ni-msg">${n.msg}</div>
+      <div class="ni-ts">${ts}</div>
+    </div>`;
+  }).join(''):'<div style="font-family:var(--font-m);font-size:11px;color:var(--muted);text-align:center;padding:30px">NO NOTIFICATIONS</div>';
+}
+function markRead(id){const n=NOTIFS.find(x=>x.id===id);if(n)n.read=true;renderNotifs();}
+function clearNotifs(){NOTIFS.forEach(n=>n.read=true);renderNotifs();}
+function toggleNotif(){document.getElementById('notif-panel').classList.toggle('open');}
+
+// ══════════════════════════════════════════════════
+// SOUNDS
+// ══════════════════════════════════════════════════
+function playCash(){
+  try{
+    const c=new(window.AudioContext||window.webkitAudioContext)();const t=c.currentTime;
+    [[880,.07],[1320,.14]].forEach(([f,d])=>{
+      const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);
+      o.type='triangle';o.frequency.value=f;
+      g.gain.setValueAtTime(0,t+d);g.gain.linearRampToValueAtTime(.3,t+d+.01);g.gain.exponentialRampToValueAtTime(.001,t+d+.4);
+      o.start(t+d);o.stop(t+d+.4);
+    });
+    const o2=c.createOscillator(),g2=c.createGain();o2.connect(g2);g2.connect(c.destination);
+    o2.type='sine';o2.frequency.setValueAtTime(2000,t+.15);o2.frequency.exponentialRampToValueAtTime(800,t+.5);
+    g2.gain.setValueAtTime(.15,t+.15);g2.gain.exponentialRampToValueAtTime(.001,t+.55);
+    o2.start(t+.15);o2.stop(t+.6);
+  }catch(e){}
+}
+function playXP(){
+  try{
+    const c=new(window.AudioContext||window.webkitAudioContext)();
+    const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);
+    o.type='sine';o.frequency.setValueAtTime(440,c.currentTime);o.frequency.linearRampToValueAtTime(660,c.currentTime+.12);
+    g.gain.setValueAtTime(.08,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.25);
+    o.start();o.stop(c.currentTime+.25);
+  }catch(e){}
+}
+
+// ══════════════════════════════════════════════════
+// SCORE BLAST
+// ══════════════════════════════════════════════════
+function blastScore(mult){
+  const el=document.getElementById('score-txt');
+  let i=0; const count=Math.min(mult,5);
+  function fire(){
+    el.className='score-txt';el.textContent=count>1?`SCORE! ×${count}`:'SCORE!';
+    void el.offsetWidth;el.classList.add('blast');
+    if(++i<count)setTimeout(fire,380);
+  }
+  fire();
+}
+
+// ══════════════════════════════════════════════════
+// XP
+// ══════════════════════════════════════════════════
+function updateXP(){
+  const lvl=getLevel(XP);
+  document.getElementById('xpnum').textContent=XP.toLocaleString();
+  document.getElementById('xpfill-big').style.width=lvl.pct+'%';
+  document.getElementById('xpsub-l').textContent=`Level ${lvl.level} — ${lvl.lbl}`;
+  document.getElementById('xpsub-r').textContent=`next: ${lvl.next.toLocaleString()} XP`;
+  document.getElementById('xplbl-mini').textContent=`XP: ${XP}`;
+  document.getElementById('xplvl-mini').textContent=`LVL ${lvl.level}`;
+  document.getElementById('xpfill-mini').style.width=lvl.pct+'%';
+}
+function getLevel(xp){
+  let level=1,lbl='Rookie',next=500,prev=0;
+  for(let i=XP_LEVELS.length-1;i>=0;i--){
+    if(xp>=XP_LEVELS[i].xp){level=i+1;lbl=XP_LEVELS[i].lbl;prev=XP_LEVELS[i].xp;next=XP_LEVELS[i+1]?XP_LEVELS[i+1].xp:99999;break;}
+  }
+  return{level,lbl,next,pct:Math.min(100,Math.round((xp-prev)/(next-prev)*100))};
+}
+function addXP(n){XP+=n;updateXP();playXP();}
+
+// ══════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════
+function fmtM(n){if(!n)return'—';if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M';if(n>=1e3)return'$'+(n/1e3).toFixed(0)+'K';return'$'+n;}
+function fmtV(n){if(!n)return'—';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(0)+'K';return String(n);}
+function scColor(s){if(s>=70)return'var(--amber)';if(s>=50)return'var(--blue)';if(s>=30)return'var(--teal)';return'var(--muted)';}
+function rank(s){
+  if(s>=80)return['LEGEND','rl'];if(s>=70)return['EPIC','re'];if(s>=60)return['RARE','rr'];
+  if(s>=50)return['UNCOMMON','ru'];if(s>=30)return['COMMON','rc'];return['TRASH','rt'];
+}
+function vcls(v){v=(v||'').toLowerCase();if(v.includes('cam'))return'cams';if(v.includes('dat'))return'dating';if(v.includes('pay'))return'paysite';if(v.includes('aff')||v.includes('net'))return'aff';if(v.includes('gamb'))return'gambling';return'';}
+function vcol(v){const c=vcls(v);if(c==='cams')return'var(--blue)';if(c==='dating')return'var(--amber)';if(c==='paysite')return'var(--teal)';if(c==='aff')return'var(--purple)';if(c==='gambling')return'var(--red)';return'var(--accent)';}
+function ownerHTML(id){
+  const u=PRE_USERS.find(x=>x.id===id)||null;
+  if(!u)return`<span class="owner-b" style="color:var(--muted2)">○ unassigned</span>`;
+  return`<span class="owner-b"><span class="oav" style="background:${u.color};color:var(--ton)">${(u.nick||'?').slice(0,2).toUpperCase()}</span>${u.nick}</span>`;
+}
+function ownerSelHTML(cur,fn){
+  return`<select class="owner-sel" onchange="${fn}(this.value)">
+    <option value="">— Unassigned —</option>
+    ${PRE_USERS.map(u=>`<option value="${u.id}" ${u.id===cur?'selected':''}>${u.nick} (${u.role})</option>`).join('')}
+  </select>`;
+}
+function wallHTML(entries,postFn){
+  const items=entries&&entries.length?entries.map(n=>{
+    const u=PRE_USERS.find(x=>x.id===n.userId)||{nick:n.userId||'?',color:'#888'};
+    const ts=n.ts?new Date(n.ts).toLocaleString('en',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+    return`<div class="wentry"><div class="wmeta"><span class="wav" style="background:${u.color};color:var(--ton)">${(u.nick||'?').slice(0,2).toUpperCase()}</span><span class="wauthor" style="color:${u.color}">${u.nick||u.id}</span><span class="wts">${ts}</span></div><div class="wtxt">${n.text}</div></div>`;
+  }).join(''):'<div class="wall-empty">NO NOTES YET</div>';
+  return`<div class="wall">${items}</div><div class="wall-input-row"><textarea class="wall-inp" id="wall-inp" placeholder="> add note..." rows="2"></textarea><button class="wall-post" onclick="${postFn}()">POST</button></div>`;
+}
+
+// ══════════════════════════════════════════════════
+// OPS CENTER
+// ══════════════════════════════════════════════════
+function renderCockpit(){
+  const periodVal=parseInt((document.getElementById('period-sel')||{}).value||'0');
+  const userFilter=(document.getElementById('user-filter-sel')||{}).value||'all';
+  let stats=MONTHLY_STATS;
+  if(periodVal>0){const cut=new Date();cut.setMonth(cut.getMonth()-periodVal);stats=MONTHLY_STATS.filter(m=>new Date(m.year,MONTHS.indexOf(m.month))>=cut);}
+  if(!stats.length)stats=MONTHLY_STATS;
+  // For non-admin, only show own stats
+  let deals=DEALS.filter(d=>canSeeDeal(d));
+  if(userFilter!=='all')deals=DEALS.filter(d=>d.owner===userFilter);
+
+  const totalP=stats.reduce((a,b)=>a+b.profit,0);
+  const totalR=stats.reduce((a,b)=>a+b.sell,0);
+  const avgP=Math.round(totalP/stats.length);
+  const best=stats.reduce((a,b)=>b.profit>a.profit?b:a);
+  const margin=totalR?Math.round(totalP/totalR*100):0;
+
+  document.getElementById('cockpit-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Revenue (period)</div><div class="stat-value sv-blue">${fmtM(totalR)}</div><div class="stat-sub">${stats.length} months</div></div>
+    <div class="stat-card"><div class="stat-label">Profit (period)</div><div class="stat-value sv-green">${fmtM(totalP)}</div><div class="stat-sub">margin ${margin}%</div></div>
+    <div class="stat-card"><div class="stat-label">Avg monthly profit</div><div class="stat-value sv-amber">${fmtM(avgP)}</div><div class="stat-sub">per month</div></div>
+    <div class="stat-card"><div class="stat-label">Best month</div><div class="stat-value sv-green">${fmtM(best.profit)}</div><div class="stat-sub">${best.month} ${best.year}</div></div>
+  `;
+  const maxP=Math.max(...stats.map(m=>m.profit),1),maxR=Math.max(...stats.map(m=>m.sell),1);
+  document.getElementById('cockpit-chart').innerHTML=stats.map(m=>`
+    <div class="bar-col">
+      <span class="bar-val">${fmtM(m.profit)}</span>
+      <div style="display:flex;gap:2px;align-items:flex-end;height:65px">
+        <div class="bar-body bprofit" style="height:${Math.round(m.profit/maxP*65)}px;width:9px"></div>
+        <div class="bar-body brevenue" style="height:${Math.round(m.sell/maxR*65)}px;width:6px"></div>
+      </div>
+      <span class="bar-lbl">${m.month}</span>
+    </div>
+  `).join('');
+  // top domains from deals (respecting permission)
+  const byDom={};
+  deals.forEach(d=>{const k=d.domain.split(' -')[0].split('(')[0].trim();if(!byDom[k])byDom[k]={p:0,c:0};byDom[k].p+=d.profit;byDom[k].c++;});
+  const sorted=Object.entries(byDom).filter(([k])=>k!=='Grand Total').sort((a,b)=>b[1].p-a[1].p).slice(0,6);
+  const maxD=sorted[0]?sorted[0][1].p:1;
+  document.getElementById('top-domains').innerHTML=sorted.map(([k,v],i)=>`
+    <div class="tdrow"><span class="tdrank">${i+1}</span><span class="tdname">${k}</span><div class="tdbar"><div class="tdbarfill" style="width:${Math.round(v.p/maxD*100)}%"></div></div><span class="tdval">${fmtM(v.p)}</span></div>
+  `).join('');
+  document.getElementById('cockpit-metrics').innerHTML=`
+    <div class="mbox"><div class="mval">${deals.length}</div><div class="mlbl">deals</div></div>
+    <div class="mbox"><div class="mval">${margin}%</div><div class="mlbl">margin</div></div>
+    <div class="mbox"><div class="mval">${fmtM(Math.round(deals.reduce((a,b)=>a+b.profit,0)/Math.max(deals.length,1)))}</div><div class="mlbl">avg deal</div></div>
+  `;
+}
+
+// ══════════════════════════════════════════════════
+// PUBLISHERS
+// ══════════════════════════════════════════════════
+let filtPubs=[...PUBS],pubFilter='all',pubSort='qualityScore',pubSortDir=-1,pubPage=1;
+const PUB_PER=15;
+let curPub=null;
+
+function renderPubStats(){
+  const p=PUBS,wc=p.filter(x=>x.contact).length,hs=p.filter(x=>x.qualityScore>=70).length,ban=p.filter(x=>x.banned).length;
+  document.getElementById('pub-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value sv-blue">${p.length}</div><div class="stat-sub">publishers</div></div>
+    <div class="stat-card"><div class="stat-label">Has contact</div><div class="stat-value sv-green">${wc}</div><div class="stat-sub">${Math.round(wc/p.length*100)}%</div></div>
+    <div class="stat-card"><div class="stat-label">Score 70+</div><div class="stat-value sv-amber">${hs}</div><div class="stat-sub">priority</div></div>
+    <div class="stat-card"><div class="stat-label">Banned</div><div class="stat-value sv-red">${ban}</div><div class="stat-sub">blocked</div></div>
+  `;
+  document.getElementById('pub-badge').textContent=p.length;
+}
+
+function filterPubs(){
+  const q=(document.getElementById('pub-search').value||'').toLowerCase();
+  filtPubs=PUBS.filter(p=>{
+    const mq=!q||p.domain.toLowerCase().includes(q)||p.contact.toLowerCase().includes(q)||p.topGeo.toLowerCase().includes(q);
+    const mf=pubFilter==='all'?true:pubFilter==='contact'?!!p.contact:pubFilter==='high'?p.qualityScore>=70:pubFilter==='banned'?p.banned:true;
+    return mq&&mf;
+  });
+  sortPubs(null); pubPage=1; renderPubTable();
+}
+
+function setPubFilter(f,btn){pubFilter=f;document.querySelectorAll('#page-publishers .fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filterPubs();}
+function sortPubs(f){
+  if(f){if(pubSort===f)pubSortDir*=-1;else{pubSort=f;pubSortDir=-1;}}
+  filtPubs.sort((a,b)=>{let av=a[pubSort]||0,bv=b[pubSort]||0;if(typeof av==='string')return pubSortDir*av.localeCompare(bv);return pubSortDir*(av-bv);});
+}
+
+function renderPubTable(){
+  const total=filtPubs.length,pages=Math.ceil(total/PUB_PER);
+  const sl=filtPubs.slice((pubPage-1)*PUB_PER,pubPage*PUB_PER);
+  if(!sl.length){document.getElementById('pub-tbody').innerHTML=`<tr><td colspan="8" style="text-align:center;padding:36px;font-family:var(--font-m);font-size:11px;color:var(--muted)">NO RESULTS</td></tr>`;document.getElementById('pinfo').textContent='';document.getElementById('pbtns').innerHTML='';return;}
+  document.getElementById('pub-tbody').innerHTML=sl.map(p=>{
+    const sc=p.qualityScore||0,col=scColor(sc);
+    const [rl,rc]=rank(sc);
+    const geos=p.topGeo?p.topGeo.split(',').slice(0,3).map(g=>`<span class="gtag">${g.trim()}</span>`).join(''):'—';
+    const bb=p.banned?`<span class="ban-badge bb-ban">⊘</span>`:`<span class="ban-badge bb-ok">✓</span>`;
+    const owner=ownerHTML(p.owner);
+    return`<tr onclick="openPub(${p.id})">
+      <td><div class="dom-cell">${p.domain}</div></td>
+      <td><div class="score-bar"><span class="snum" style="color:${col}">${sc||'—'}</span><div class="btrack"><div class="bfill" style="width:${Math.min(sc,100)}%;background:${col}"></div></div></div></td>
+      <td style="font-family:var(--font-m);font-size:11px;color:var(--teal)">${fmtV(p.monthlyVisits)}</td>
+      <td><div class="geo-tags">${geos}</div></td>
+      <td style="font-family:var(--font-m);font-size:10px;color:var(--muted);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.contact||'—'}</td>
+      <td>${owner}</td>
+      <td>${bb}</td>
+      <td><span class="rank-b ${rc}">${rl}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('pinfo').textContent=`${(pubPage-1)*PUB_PER+1}–${Math.min(pubPage*PUB_PER,total)} of ${total}`;
+  let btns=`<button class="pbtn" onclick="pubGo(${pubPage-1})" ${pubPage===1?'disabled':''}>←</button>`;
+  for(let i=Math.max(1,pubPage-2);i<=Math.min(pages,pubPage+2);i++)btns+=`<button class="pbtn ${i===pubPage?'active':''}" onclick="pubGo(${i})">${i}</button>`;
+  btns+=`<button class="pbtn" onclick="pubGo(${pubPage+1})" ${pubPage===pages?'disabled':''}>→</button>`;
+  document.getElementById('pbtns').innerHTML=btns;
+}
+function pubGo(p){if(p<1||p>Math.ceil(filtPubs.length/PUB_PER))return;pubPage=p;renderPubTable();}
+
+function openPub(id){
+  curPub=PUBS.find(p=>p.id===id);if(!curPub)return;
+  const p=curPub;
+  document.getElementById('pm-title').textContent=p.domain;
+  document.getElementById('pm-ban').style.display=p.banned?'flex':'none';
+  const sc=p.qualityScore||0;const [rl,rc]=rank(sc);
+  document.getElementById('pm-grid').innerHTML=`
+    <div class="dblock"><div class="dkey">Quality score</div><div class="dval" style="font-size:22px;font-family:var(--font-d);color:${scColor(sc)}">${sc||'—'}</div></div>
+    <div class="dblock"><div class="dkey">Rank</div><div class="dval"><span class="rank-b ${rc}">${rl}</span></div></div>
+    <div class="dblock"><div class="dkey">Monthly visits</div><div class="dval">${fmtV(p.monthlyVisits)}</div></div>
+    <div class="dblock"><div class="dkey">Top GEO</div><div class="dval">${p.topGeo||'—'}</div></div>
+    <div class="dblock"><div class="dkey">Contact</div><div class="dval">${p.contact||'—'}</div></div>
+    <div class="dblock"><div class="dkey">Channel</div><div class="dval">${p.contactType||'—'}</div></div>
+  `;
+  const s=p.searchPct||0,d=p.directPct||0,r=p.referralPct||0;
+  document.getElementById('pm-traffic').innerHTML=`<h4>Traffic sources</h4>
+    <div class="trrow"><span class="trlbl">SEARCH</span><div class="trtrack"><div class="trfill" style="width:${s}%;background:var(--blue)"></div></div><span class="trval" style="color:var(--blue)">${s}%</span></div>
+    <div class="trrow"><span class="trlbl">DIRECT</span><div class="trtrack"><div class="trfill" style="width:${d}%;background:var(--accent)"></div></div><span class="trval" style="color:var(--accent)">${d}%</span></div>
+    <div class="trrow"><span class="trlbl">REFERRAL</span><div class="trtrack"><div class="trfill" style="width:${r}%;background:${r>50?'var(--red)':'var(--amber)'}"></div></div><span class="trval" style="color:${r>50?'var(--red)':'var(--amber)'}">${r}%</span></div>`;
+  document.getElementById('pm-owner').innerHTML=ownerHTML(p.owner)+ownerSelHTML(p.owner,'setPubOwner');
+  document.getElementById('pm-wall').innerHTML=wallHTML(p.wall||[],'postPubNote');
+  document.getElementById('pub-modal').classList.add('open');
+}
+
+function setPubOwner(uid){if(!curPub)return;curPub.owner=uid;renderPubTable();const u=PRE_USERS.find(x=>x.id===uid);addNotif('sys','Owner assigned',(u?u.nick:'Unassigned')+' → '+curPub.domain);showToast('✓ OWNER UPDATED','success');}
+function markContacted(){if(!curPub)return;curPub.status='contacted';renderPubTable();renderPubStats();addXP(50);showToast('CONTACTED +50 XP','success');closeModal('pub-modal');}
+function banPub(){if(!curPub)return;if(confirm('Ban "'+curPub.domain+'"?')){curPub.banned=true;BANNED_LIST.push(curPub.domain.toLowerCase());renderPubTable();renderPubStats();renderBanned();showToast('⊘ BANNED','error');closeModal('pub-modal');}}
+function postPubNote(){
+  if(!curPub)return;
+  const inp=document.getElementById('wall-inp');const text=inp?inp.value.trim():'';if(!text)return;
+  if(!curPub.wall)curPub.wall=[];
+  curPub.wall.unshift({userId:currentUser.id,text,ts:new Date().toISOString()});
+  inp.value='';
+  document.getElementById('pm-wall').innerHTML=wallHTML(curPub.wall,'postPubNote');
+  showToast('✓ NOTE POSTED','success');
+}
+function openAddPub(){document.getElementById('add-pub-modal').classList.add('open');}
+function addPub(){
+  const dom=document.getElementById('fp-domain').value.trim();if(!dom){showToast('DOMAIN REQUIRED','error');return;}
+  const s=parseFloat(document.getElementById('fp-search').value)||0,d=parseFloat(document.getElementById('fp-direct').value)||0,r=parseFloat(document.getElementById('fp-ref').value)||0;
+  const qs=r>0?Math.round((s*.5+d*.3+(100-r)*.2)*10)/10:0;
+  const banned=BANNED_LIST.includes(dom.toLowerCase());
+  PUBS.unshift({id:PUBS.length+1,domain:dom,contact:document.getElementById('fp-contact').value,contactType:document.getElementById('fp-ctype').value,monthlyVisits:parseInt(document.getElementById('fp-visits').value)||0,topGeo:document.getElementById('fp-geo').value,searchPct:s,directPct:d,referralPct:r,qualityScore:qs,banned,status:'new',owner:currentUser.id,wall:[]});
+  filterPubs();renderPubStats();renderBanned();closeModal('add-pub-modal');
+  ['fp-domain','fp-contact','fp-visits','fp-geo','fp-search','fp-direct','fp-ref'].forEach(id=>document.getElementById(id).value='');
+  addXP(30);showToast(banned?'⊘ ADDED — BANNED!':'✓ PUBLISHER ADDED',banned?'error':'success');
+}
+
+// ══════════════════════════════════════════════════
+// DEALS
+// ══════════════════════════════════════════════════
+function renderDeals(){
+  const myDeals=DEALS.filter(d=>canSeeDeal(d));
+  const tp=myDeals.reduce((a,b)=>a+b.profit,0),tr=myDeals.reduce((a,b)=>a+b.sell,0);
+  const best=myDeals.length?myDeals.reduce((a,b)=>b.profit>a.profit?b:a):{profit:0,domain:'—'};
+  document.getElementById('deal-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Total deals</div><div class="stat-value sv-blue">${myDeals.length}</div><div class="stat-sub">all time</div></div>
+    <div class="stat-card"><div class="stat-label">Total profit</div><div class="stat-value sv-green">${fmtM(tp)}</div></div>
+    <div class="stat-card"><div class="stat-label">Avg deal</div><div class="stat-value sv-amber">${fmtM(Math.round(tp/Math.max(myDeals.length,1)))}</div></div>
+    <div class="stat-card"><div class="stat-label">Best deal</div><div class="stat-value sv-green">${fmtM(best.profit)}</div><div class="stat-sub">${best.domain.split(' -')[0].slice(0,18)}</div></div>
+  `;
+  document.getElementById('deals-badge').textContent=myDeals.length;
+  const months={};
+  myDeals.forEach(d=>{const k=d.month+' '+d.year;if(!months[k])months[k]={month:d.month,year:d.year,mnum:MONTHS.indexOf(d.month),deals:[]};months[k].deals.push(d);});
+  const sorted=Object.values(months).sort((a,b)=>a.year!==b.year?b.year-a.year:b.mnum-a.mnum);
+  document.getElementById('deals-months').innerHTML=sorted.map(mg=>{
+    const mp=mg.deals.reduce((a,b)=>a+b.profit,0),mr=mg.deals.reduce((a,b)=>a+b.sell,0);
+    return`<div style="margin-bottom:18px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border)">
+        <span style="font-family:var(--font-d);font-size:10px;letter-spacing:.15em;color:var(--accent)">${mg.month} ${mg.year}</span>
+        <span style="font-family:var(--font-m);font-size:10px;color:var(--muted)">rev: <span style="color:var(--blue)">${fmtM(mr)}</span> · profit: <span style="color:var(--accent)">${fmtM(mp)}</span></span>
+      </div>
+      <div class="deals-list">${mg.deals.sort((a,b)=>b.profit-a.profit).map(d=>{
+        const mega=d.profit>=1000,mult=Math.floor(d.profit/1000);
+        return`<div class="deal-card ${mega?'mega':''}" onclick="dealClick(${d.id},${mult})">
+          <span class="deal-mon">${d.month} ${d.year}</span>
+          <span class="deal-dom">${d.domain}</span>
+          <span class="deal-buy">buy: ${fmtM(d.buy)}</span>
+          <span class="deal-profit ${mega?'mega':''}">+${fmtM(d.profit)}</span>
+          ${mega?'<span class="deal-star">⭐</span>':''}
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+  }).join('');
+  updateXP();
+}
+function dealClick(id,mult){const d=DEALS.find(x=>x.id===id);if(!d)return;if(d.profit>=1000){blastScore(mult||1);playCash();}addXP(Math.min(d.profit,1000));}
+function openAddDeal(){
+  const now=new Date();
+  document.getElementById('fd-month').value=MONTHS[now.getMonth()];
+  document.getElementById('fd-year').value=now.getFullYear();
+  document.getElementById('add-deal-modal').classList.add('open');
+}
+function addDeal(){
+  const dom=document.getElementById('fd-domain').value.trim(),buy=parseFloat(document.getElementById('fd-buy').value)||0,sell=parseFloat(document.getElementById('fd-sell').value)||0;
+  if(!dom||!buy||!sell){showToast('FILL ALL FIELDS','error');return;}
+  const profit=sell-buy;
+  DEALS.unshift({id:DEALS.length+1,month:document.getElementById('fd-month').value,year:parseInt(document.getElementById('fd-year').value),domain:dom,advertiser:document.getElementById('fd-adv').value||'—',buy,sell,profit,owner:currentUser.id});
+  renderDeals();renderCockpit();
+  if(profit>=1000){blastScore(Math.floor(profit/1000)||1);playCash();}
+  addXP(1000);closeModal('add-deal-modal');
+  ['fd-domain','fd-adv','fd-buy','fd-sell'].forEach(id=>document.getElementById(id).value='');
+  showToast(`✓ DEAL +${fmtM(profit)} PROFIT`,'success');
+}
+
+// ══════════════════════════════════════════════════
+// ADVERTISERS
+// ══════════════════════════════════════════════════
+let filtAdvs=[...ADVS],advFilter='all',curAdv=null;
+function renderAdvStats(){
+  const total=ADVS.length,active=ADVS.filter(a=>a.status==='active').length,prospect=ADVS.filter(a=>a.status==='prospect').length;
+  const verts=[...new Set(ADVS.map(a=>a.vertical))].length;
+  document.getElementById('adv-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value sv-blue">${total}</div></div>
+    <div class="stat-card"><div class="stat-label">Active</div><div class="stat-value sv-green">${active}</div></div>
+    <div class="stat-card"><div class="stat-label">Prospects</div><div class="stat-value sv-amber">${prospect}</div></div>
+    <div class="stat-card"><div class="stat-label">Verticals</div><div class="stat-value sv-blue">${verts}</div></div>
+  `;
+  document.getElementById('adv-badge').textContent=total;
+}
+function filterAdvs(){
+  const q=(document.getElementById('adv-search').value||'').toLowerCase();
+  filtAdvs=ADVS.filter(a=>{
+    const mq=!q||a.brand.toLowerCase().includes(q)||a.name.toLowerCase().includes(q)||a.vertical.toLowerCase().includes(q);
+    let mf=true;
+    if(advFilter==='active')mf=a.status==='active';
+    else if(advFilter==='cams')mf=a.vertical.toLowerCase().includes('cam');
+    else if(advFilter==='dating')mf=a.vertical.toLowerCase().includes('dat');
+    else if(advFilter==='aff')mf=a.vertical.toLowerCase().includes('aff')||a.vertical.toLowerCase().includes('net');
+    else if(advFilter==='paysite')mf=a.vertical.toLowerCase().includes('pay');
+    return mq&&mf;
+  });
+  renderAdvGrid();
+}
+function setAdvFilter(f,btn){advFilter=f;document.querySelectorAll('#page-advertisers .fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filterAdvs();}
+function renderAdvGrid(){
+  const dc=brand=>DEALS.filter(d=>d.advertiser&&d.advertiser.toLowerCase().includes(brand.toLowerCase().slice(0,6))).length;
+  document.getElementById('adv-grid').innerHTML=filtAdvs.map(a=>{
+    const vc=vcls(a.vertical),col=vcol(a.vertical);
+    const slbl=a.status==='active'?'● ACTIVE':a.status==='paused'?'◐ PAUSED':'○ PROSPECT';
+    const scl=a.status==='active'?'active':a.status==='paused'?'paused':'prospect';
+    const init=a.brand.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+    const d=dc(a.brand);
+    return`<div class="adv-card ${vc}" onclick="openAdv(${a.id})">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:7px">
+        <div style="width:30px;height:30px;background:var(--dim2);border:1px solid var(--border2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:10px;font-weight:900;color:${col};flex-shrink:0">${init}</div>
+        <div><div class="adv-name" style="color:${col}">${a.brand}</div><div class="adv-vert">${a.vertical}</div></div>
+      </div>
+      ${a.name?`<div class="adv-cr"><span class="adv-cl">Contact</span><span class="adv-cv">${a.name}</span></div>`:''}
+      ${a.contact?`<div class="adv-cr"><span class="adv-cl">${a.channel||'—'}</span><span class="adv-cv">${a.contact}</span></div>`:''}
+      ${a.geo?`<div style="margin-top:6px"><span style="font-family:var(--font-m);font-size:9px;color:var(--muted)">GEO: ${a.geo}</span></div>`:''}
+      <div class="adv-sr">
+        <span class="adv-st ${scl}">${slbl}</span>
+        ${d>0?`<span class="adv-dc">${d} deals</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function openAdv(id){
+  curAdv=ADVS.find(a=>a.id===id);if(!curAdv)return;
+  const a=curAdv,col=vcol(a.vertical);
+  const init=a.brand.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+  document.getElementById('am-icon').textContent=init;document.getElementById('am-icon').style.color=col;
+  document.getElementById('am-name').textContent=a.brand;document.getElementById('am-name').style.color=col;
+  document.getElementById('am-vert').textContent=a.vertical+(a.geo?' · '+a.geo:'');
+  const dc=DEALS.filter(d=>d.advertiser&&d.advertiser.toLowerCase().includes(a.brand.toLowerCase().slice(0,5))).length;
+  document.getElementById('am-req').innerHTML=`
+    <div class="req-box"><div class="req-lbl">Target GEO</div><div class="req-val">${a.geo||'—'}</div></div>
+    <div class="req-box"><div class="req-lbl">Ad formats</div><div class="req-val">${a.formats||'—'}</div></div>
+    <div class="req-box"><div class="req-lbl">Deals (history)</div><div class="req-val" style="color:var(--accent)">${dc}</div></div>
+  `;
+  document.getElementById('am-contacts').innerHTML=`
+    <div class="dblock"><div class="dkey">Contact</div><div class="dval">${a.name||'—'}</div></div>
+    <div class="dblock"><div class="dkey">Channel</div><div class="dval">${a.channel||'—'}</div></div>
+    <div class="dblock"><div class="dkey">Primary</div><div class="dval" style="font-size:10px">${a.contact||'—'}</div></div>
+    <div class="dblock"><div class="dkey">Alt.</div><div class="dval" style="font-size:10px">${a.contact2||'—'}</div></div>
+  `;
+  document.getElementById('am-owner').innerHTML=ownerHTML(a.owner)+ownerSelHTML(a.owner,'setAdvOwner');
+  document.getElementById('am-ssel').innerHTML=`
+    <div class="sopt ${a.status==='active'?'sa':''}" onclick="setAdvStatus('active')">ACTIVE</div>
+    <div class="sopt ${a.status==='paused'?'sp':''}" onclick="setAdvStatus('paused')">PAUSED</div>
+    <div class="sopt ${a.status==='prospect'?'sq':''}" onclick="setAdvStatus('prospect')">PROSPECT</div>
+  `;
+  document.getElementById('am-wall').innerHTML=wallHTML(a.wall||[],'postAdvNote');
+  document.getElementById('adv-modal').classList.add('open');
+}
+function setAdvOwner(uid){if(!curAdv)return;curAdv.owner=uid;renderAdvGrid();const u=PRE_USERS.find(x=>x.id===uid);addNotif('sys','Owner assigned',(u?u.nick:'Unassigned')+' → '+curAdv.brand);showToast('✓ OWNER UPDATED','success');}
+function setAdvStatus(s){if(!curAdv)return;curAdv.status=s;document.querySelectorAll('#am-ssel .sopt').forEach(el=>{el.className='sopt';});const m={'active':'sa','paused':'sp','prospect':'sq'};document.querySelector(`#am-ssel .sopt:nth-child(${['active','paused','prospect'].indexOf(s)+1})`).classList.add(m[s]);renderAdvGrid();renderAdvStats();showToast('STATUS UPDATED','success');}
+function postAdvNote(){
+  if(!curAdv)return;
+  const inp=document.getElementById('wall-inp');const text=inp?inp.value.trim():'';if(!text)return;
+  if(!curAdv.wall)curAdv.wall=[];
+  curAdv.wall.unshift({userId:currentUser.id,text,ts:new Date().toISOString()});
+  inp.value='';document.getElementById('am-wall').innerHTML=wallHTML(curAdv.wall,'postAdvNote');
+  showToast('✓ NOTE POSTED','success');
+}
+function openAddAdv(){document.getElementById('add-adv-modal').classList.add('open');}
+function addAdv(){
+  const brand=document.getElementById('fa-brand').value.trim();if(!brand){showToast('BRAND REQUIRED','error');return;}
+  ADVS.unshift({id:ADVS.length+1,brand,vertical:document.getElementById('fa-vert').value,name:document.getElementById('fa-name').value,channel:document.getElementById('fa-ch').value,contact:document.getElementById('fa-contact').value,contact2:document.getElementById('fa-contact2').value,geo:document.getElementById('fa-geo').value,formats:document.getElementById('fa-formats').value,status:'prospect',owner:currentUser.id,wall:[],notes:''});
+  filterAdvs();renderAdvStats();closeModal('add-adv-modal');
+  ['fa-brand','fa-name','fa-contact','fa-contact2','fa-geo','fa-formats'].forEach(id=>document.getElementById(id).value='');
+  addXP(10);showToast('✓ ADVERTISER ADDED','success');
+}
+
+// ══════════════════════════════════════════════════
+// CALENDAR & TASKS
+// ══════════════════════════════════════════════════
+let calDate=new Date(),taskFilter='all',selCalDay=null;
+const DOWS=['MON','TUE','WED','THU','FRI','SAT','SUN'];
+const TYPE_COLORS={task:'var(--accent)',followup:'var(--amber)',deal:'var(--blue)',deadline:'var(--red)'};
+
+function renderCalendar(){
+  const y=calDate.getFullYear(),m=calDate.getMonth();
+  document.getElementById('cal-title').textContent=MONTHS[m].toUpperCase()+' '+y;
+  document.getElementById('cal-dows').innerHTML=DOWS.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  const first=new Date(y,m,1),last=new Date(y,m+1,0);
+  let dow=(first.getDay()+6)%7; // Monday-based
+  const days=[];
+  for(let i=0;i<dow;i++){const d=new Date(y,m,-(dow-1-i));days.push({date:d,cur:false});}
+  for(let i=1;i<=last.getDate();i++)days.push({date:new Date(y,m,i),cur:true});
+  while(days.length%7!==0){const d=new Date(y,m+1,days.length-last.getDate()-dow+1);days.push({date:d,cur:false});}
+  const today=new Date();
+  document.getElementById('cal-days').innerHTML=days.map(({date,cur})=>{
+    const ds=date.toISOString().slice(0,10);
+    const isToday=date.toDateString()===today.toDateString();
+    const tasks=TASKS.filter(t=>t.date===ds);
+    const dots=tasks.map(t=>`<span class="cal-dot" style="background:${TYPE_COLORS[t.type]||'var(--accent)'}"></span>`).join('');
+    return`<div class="cal-day ${isToday?'today':''} ${!cur?'other-month':''}" onclick="selectDay('${ds}')">
+      <div class="cal-day-num">${date.getDate()}</div>
+      <div>${dots}</div>
+    </div>`;
+  }).join('');
+  renderTasks();
+}
+function selectDay(ds){selCalDay=selCalDay===ds?null:ds;renderTasks();document.getElementById('task-date-lbl').textContent=selCalDay?'TASKS · '+selCalDay:'ALL TASKS';}
+function calMove(d){calDate=new Date(calDate.getFullYear(),calDate.getMonth()+d,1);renderCalendar();}
+function calToday(){calDate=new Date();renderCalendar();}
+
+function renderTasks(){
+  let tasks=TASKS;
+  if(selCalDay)tasks=tasks.filter(t=>t.date===selCalDay);
+  if(taskFilter==='mine')tasks=tasks.filter(t=>!currentUser||t.assignTo===currentUser.id);
+  if(taskFilter==='open')tasks=tasks.filter(t=>!t.done);
+  if(!tasks.length){document.getElementById('tasks-list').innerHTML=`<div style="font-family:var(--font-m);font-size:11px;color:var(--muted);text-align:center;padding:30px">NO TASKS${selCalDay?' FOR THIS DAY':''}</div>`;return;}
+  document.getElementById('tasks-list').innerHTML=tasks.sort((a,b)=>a.date.localeCompare(b.date)).map(t=>{
+    const u=PRE_USERS.find(x=>x.id===t.assignTo);
+    const col=TYPE_COLORS[t.type]||'var(--accent)';
+    return`<div class="task-item" style="border-left:3px solid ${col}">
+      <div class="task-check ${t.done?'done':''}" onclick="toggleTask(${t.id},event)">${t.done?'✓':''}</div>
+      <div>
+        <div class="task-txt ${t.done?'done':''}">${t.text}</div>
+        <div style="display:flex;gap:8px;margin-top:3px;align-items:center">
+          <span class="task-meta">${t.date}</span>
+          ${t.rel?`<span class="task-meta">· ${t.rel}</span>`:''}
+          ${u?`<span class="task-assign" style="background:${u.color};color:var(--ton)">${(u.nick||'?').slice(0,2).toUpperCase()}</span>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleTask(id,e){e.stopPropagation();const t=TASKS.find(x=>x.id===id);if(t){t.done=!t.done;if(t.done)addXP(20);renderTasks();renderCalendar();}}
+function setTaskFilter(f,btn){taskFilter=f;document.querySelectorAll('#page-sales .fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTasks();}
+function openAddTask(){
+  const inp=document.getElementById('ft-date');if(inp)inp.value=selCalDay||new Date().toISOString().slice(0,10);
+  document.getElementById('add-task-modal').classList.add('open');
+}
+function addTask(){
+  const text=document.getElementById('ft-text').value.trim();if(!text){showToast('TASK TEXT REQUIRED','error');return;}
+  TASKS.push({id:TASKS.length+1,text,date:document.getElementById('ft-date').value,assignTo:document.getElementById('ft-assign').value,type:document.getElementById('ft-type').value,rel:document.getElementById('ft-rel').value,done:false});
+  renderCalendar();closeModal('add-task-modal');
+  ['ft-text','ft-rel'].forEach(id=>document.getElementById(id).value='');
+  addNotif('personal','Task created',text);
+  showToast('✓ TASK ADDED','success');
+}
+
+// ══════════════════════════════════════════════════
+// MAGIC WAND
+// ══════════════════════════════════════════════════
+function openMagicWand(){
+  const results=[];
+  ADVS.filter(a=>a.status==='active'&&a.geo).forEach(adv=>{
+    const advGeos=adv.geo.split(',').map(g=>g.trim().toUpperCase());
+    PUBS.filter(p=>p.qualityScore>=40&&!p.banned&&p.topGeo).forEach(pub=>{
+      const pubGeos=pub.topGeo.split(',').map(g=>g.trim().toUpperCase().slice(0,2));
+      const overlap=advGeos.filter(g=>pubGeos.some(pg=>pg.includes(g.slice(0,2)))).length;
+      if(overlap>0){
+        const score=Math.round(pub.qualityScore*0.6+overlap*10);
+        results.push({adv,pub,overlap,score});
+      }
+    });
+  });
+  results.sort((a,b)=>b.score-a.score);
+  const top=results.slice(0,10);
+  document.getElementById('wand-results').innerHTML=top.length?top.map(r=>`
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:120px">
+        <div style="font-family:var(--font-d);font-size:10px;color:var(--blue);letter-spacing:.08em">${r.adv.brand}</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">GEO: ${r.adv.geo}</div>
+      </div>
+      <div style="font-family:var(--font-d);font-size:14px;color:var(--accent)">↔</div>
+      <div style="flex:1;min-width:120px">
+        <div style="font-family:var(--font-d);font-size:10px;color:var(--teal);letter-spacing:.08em">${r.pub.domain}</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">GEO: ${r.pub.topGeo} · Q:${r.pub.qualityScore}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:var(--font-d);font-size:16px;font-weight:700;color:var(--amber)">${r.score}</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">match score</div>
+      </div>
+    </div>
+  `).join(''):'<div style="font-family:var(--font-m);font-size:12px;color:var(--muted);text-align:center;padding:40px">NO MATCHES FOUND — add GEO to advertisers and publishers</div>';
+  document.getElementById('wand-modal').classList.add('open');
+}
+
+// ══════════════════════════════════════════════════
+// BANNED
+// ══════════════════════════════════════════════════
+function renderBanned(){
+  const all=[...new Set([...BANNED_LIST,...PUBS.filter(p=>p.banned).map(p=>p.domain.toLowerCase())])];
+  document.getElementById('banned-tbody').innerHTML=all.map(d=>{
+    const p=PUBS.find(x=>x.domain.toLowerCase()===d);
+    return`<tr><td class="dom-cell">${d}</td><td style="font-family:var(--font-m);font-size:10px;color:var(--muted)">${p?p.contact||'—':'—'}</td><td><span class="ban-badge bb-ban">⊘ BLOCKED</span></td></tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════════
+function saveProfile(){if(!currentUser)return;currentUser.nick=document.getElementById('prof-nick').value.trim()||currentUser.nick;document.getElementById('uname').textContent=currentUser.nick;showToast('✓ PROFILE SAVED','success');}
+function setTheme(t,el){document.querySelectorAll('.theme-opt').forEach(x=>x.classList.remove('active'));el.classList.add('active');showToast('Theme: '+t.toUpperCase()+' (system-controlled)','success');}
+function connectGmail(){document.getElementById('gmail-status').textContent='Connected (demo)';document.querySelector('[onclick="connectGmail()"]').className='int-btn connected';showToast('✓ GMAIL CONNECTED (demo)','success');}
+function connectTelegram(){document.getElementById('tg-status').textContent='Connected (demo)';document.querySelector('[onclick="connectTelegram()"]').className='int-btn connected';showToast('✓ TELEGRAM CONNECTED (demo)','success');}
+
+// ══════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════
+function showPage(name,btn,prefix){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  // sidebar
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  const sni=document.getElementById('ni-'+name);if(sni)sni.classList.add('active');
+  // mobile nav
+  document.querySelectorAll('.mnav-item').forEach(b=>b.classList.remove('active'));
+  const mni=document.getElementById('mn-'+name);if(mni)mni.classList.add('active');
+  // magic fab only on sales
+  document.getElementById('magic-fab').style.display=name==='sales'?'flex':'none';
+  // close notif panel
+  document.getElementById('notif-panel').classList.remove('open');
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} show`;setTimeout(()=>t.classList.remove('show'),2800);}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  sortPubs(null);
+  // set today in task date
+  const ftd=document.getElementById('ft-date');
+  if(ftd)ftd.value=new Date().toISOString().slice(0,10);
+});
+
+// ===================================================
+// SUPABASE MODULE - clean insert, no overwrites
+// ===================================================
+var DB = (function() {
+  var URL = 'https://kmgtcmbubmkrmnwpierl.supabase.co/rest/v1/';
+  var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZ3RjbWJ1Ym1rcm1ud3BpZXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzOTYzMjEsImV4cCI6MjA4OTk3MjMyMX0.9E7tYIMsyC9LQfrjWK_FdHuXhvaagG14XgVOGLP_5n8';
+  var H = {'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=representation'};
+
+  function req(method, table, body, filter) {
+    var url = URL + table + (filter ? '?' + filter : '');
+    var opts = { method: method, headers: H };
+    if(body) opts.body = JSON.stringify(body);
+    return fetch(url, opts).then(function(r) {
+      return r.ok ? r.json().catch(function(){return null;}) : null;
+    }).catch(function(e) {
+      console.warn('DB error:', e);
+      return null;
+    });
+  }
+
+  return {
+    get: function(table, filter) { return req('GET', table, null, filter || 'select=*&order=created_at.desc&limit=500'); },
+    post: function(table, data) { return req('POST', table, data); },
+    patch: function(table, id, data) { return req('PATCH', table, data, 'id=eq.' + id); },
+    del: function(table, id) { return req('DELETE', table, null, 'id=eq.' + id); }
+  };
+})();
+
+var DB_ONLINE = false;
+
+// Map DB row -> app object
+function pubFromRow(r) {
+  return {id:r.id,domain:r.domain,contact:r.contact||'',contactType:r.contact_type||'',
+    monthlyVisits:r.monthly_visits||0,topGeo:r.top_geo||'',
+    searchPct:r.search_pct||0,directPct:r.direct_pct||0,referralPct:r.referral_pct||0,
+    qualityScore:r.quality_score||0,banned:r.banned||false,
+    status:r.status||'new',owner:r.owner_id||'',wall:r.wall||[]};
+}
+function pubToRow(p) {
+  return {domain:p.domain,contact:p.contact||'',contact_type:p.contactType||'',
+    monthly_visits:p.monthlyVisits||0,top_geo:p.topGeo||'',
+    search_pct:p.searchPct||0,direct_pct:p.directPct||0,referral_pct:p.referralPct||0,
+    quality_score:p.qualityScore||0,banned:p.banned||false,
+    status:p.status||'new',owner_id:p.owner||'',wall:p.wall||[]};
+}
+function dealFromRow(r) {
+  return {id:r.id,month:r.month,year:r.year,domain:r.domain,
+    advertiser:r.advertiser||'',buy:r.buy||0,sell:r.sell||0,profit:r.profit||0,
+    owner:r.owner_id||'',splits:r.splits||[]};
+}
+function dealToRow(d) {
+  return {month:d.month,year:d.year,domain:d.domain,advertiser:d.advertiser||'',
+    buy:d.buy||0,sell:d.sell||0,profit:d.profit||0,
+    owner_id:d.owner||currentUser.id,splits:d.splits||[]};
+}
+function advFromRow(r) {
+  return {id:r.id,brand:r.brand,vertical:r.vertical||'',name:r.contact_name||'',
+    channel:r.channel||'',contact:r.contact||'',contact2:r.contact2||'',
+    geo:r.geo||'',formats:r.formats||'',status:r.status||'prospect',
+    owner:r.owner_id||'',wall:r.wall||[],notes:r.notes||''};
+}
+
+// Load all data from DB, merge with local
+function dbLoad() {
+  Promise.all([
+    DB.get('publishers'),
+    DB.get('advertisers'),
+    DB.get('deals')
+  ]).then(function(results) {
+    var pubs = results[0], advs = results[1], deals = results[2];
+    if(pubs && pubs.length > 0) {
+      PUBS = pubs.map(pubFromRow);
+      filterPubs(); renderPubStats();
+    }
+    if(advs && advs.length > 0) {
+      ADVS = advs.map(advFromRow);
+      filterAdvs(); renderAdvStats();
+    }
+    if(deals && deals.length > 0) {
+      DEALS = deals.map(dealFromRow);
+      renderDeals(); renderCockpit();
+      XP = DEALS.filter(function(d){return canSeeDeal(d);}).reduce(function(a,b){return a+Math.min(b.profit,1000);},0);
+      updateXP();
+    }
+    DB_ONLINE = true;
+    showToast('DB: ' + (pubs?pubs.length:0) + ' pubs loaded', 'success');
+  }).catch(function(e) {
+    console.warn('DB offline:', e);
+    showToast('DB offline - local data', 'error');
+  });
+}
+
+// Save pub to DB (called after addPub)
+function dbSavePub(pub) {
+  if(!DB_ONLINE) return;
+  DB.post('publishers', pubToRow(pub));
+}
+
+// Save deal to DB (called after addDeal)
+function dbSaveDeal(deal) {
+  if(!DB_ONLINE) return;
+  DB.post('deals', dealToRow(deal));
+}
+
+// Save wall note (called after postPubNote / postAdvNote)
+function dbSaveWall(table, id, wall) {
+  if(!DB_ONLINE || typeof id !== 'string') return;
+  DB.patch(table, id, {wall: wall});
+}
+
+// Save owner change
+function dbSaveOwner(table, id, ownerId) {
+  if(!DB_ONLINE || typeof id !== 'string') return;
+  DB.patch(table, id, {owner_id: ownerId});
+}
+
+// Patch launchApp to call dbLoad after render
+var _origLaunchApp = launchApp;
+launchApp = function(user) {
+  _origLaunchApp(user);
+  // Load from DB 500ms after UI renders
+  setTimeout(dbLoad, 500);
+};
+
+// Patch addPub to also save to DB
+var _origAddPub = addPub;
+addPub = function() {
+  var before = PUBS.length;
+  _origAddPub();
+  if(PUBS.length > before) dbSavePub(PUBS[0]);
+};
+
+// Patch addDeal to also save to DB
+var _origAddDeal = addDeal;
+addDeal = function() {
+  var before = DEALS.length;
+  _origAddDeal();
+  if(DEALS.length > before) dbSaveDeal(DEALS[0]);
+};
+// ===================================================
+// END SUPABASE MODULE
+// ===================================================
+
+</script>
+</body>
+</html>
